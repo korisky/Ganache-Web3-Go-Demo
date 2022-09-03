@@ -3,7 +3,9 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
+	"log"
 )
 
 var (
@@ -19,5 +21,13 @@ func main() {
 	header, _ := client.HeaderByNumber(ctx, nil)
 	fmt.Println(header.Number.String())
 	fmt.Println(header.TxHash.String())
+
+	address := common.HexToAddress("0xe10eE98bB84B2073B88353e3AB4433916205DF40")
+	balance, err := client.BalanceAt(ctx, address, nil)
+	if err != nil {
+		log.Fatal(err)
+	} else {
+		fmt.Println(balance.String())
+	}
 
 }
