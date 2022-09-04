@@ -6,6 +6,7 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"log"
+	"quickNode/transaction"
 )
 
 var (
@@ -30,4 +31,6 @@ func main() {
 		fmt.Println("balance in : " + balance.String())
 	}
 
+	// call transaction
+	transaction.QueryTransactions()
 }
