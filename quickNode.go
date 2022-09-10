@@ -3,9 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/ethclient"
-	"log"
+	"quickNode/address"
 	"quickNode/transaction"
 )
 
@@ -20,17 +19,12 @@ func main() {
 
 	// get header number
 	header, _ := client.HeaderByNumber(ctx, nil)
-	fmt.Println(header.Number.String())
-	fmt.Println(header.TxHash.String())
+	fmt.Println("Latest Block Number:" + header.Number.String() + "\n")
+	fmt.Println("Latest Txn Hash:" + header.TxHash.String() + "\n")
 
-	address := common.HexToAddress("0xe10eE98bB84B2073B88353e3AB4433916205DF40")
-	balance, err := client.BalanceAt(ctx, address, nil)
-	if err != nil {
-		log.Fatal(err)
-	} else {
-		fmt.Println("balance in : " + balance.String())
-	}
+	// call query balance
+	address.QueryBalance(ctx, client, "0xe10eE98bB84B2073B88353e3AB4433916205DF40")
 
 	// call transaction
-	transaction.QueryTransactions()
+	transaction.QueryTransactions(ctx, client)
 }
