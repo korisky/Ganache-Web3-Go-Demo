@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/ethereum/go-ethereum/ethclient"
-	"quickNode/address"
+	"quickNode/account"
 	"quickNode/transaction"
 )
 
@@ -23,7 +23,7 @@ func main() {
 	fmt.Println("Latest Txn Hash:" + header.TxHash.String() + "\n")
 
 	// call query balance
-	address.QueryBalance(ctx, client, "0xe10eE98bB84B2073B88353e3AB4433916205DF40")
+	account.QueryBalance(ctx, client, "0xe10eE98bB84B2073B88353e3AB4433916205DF40", nil)
 
 	// call transaction
 	transaction.QueryTransactions(ctx, client)
