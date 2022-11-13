@@ -32,8 +32,9 @@ func SendingRawTransfer(ctx context.Context, client *ethclient.Client) {
 
 	// buffer reader for input priKey
 	r := bufio.NewReader(os.Stdin)
-	fmt.Fprint(os.Stderr, "Please input your account pri-key")
+	fmt.Fprint(os.Stderr, "Please input your account pri-key\n")
 	hexPriKey, _ := r.ReadString('\n')
+	hexPriKey = hexPriKey[:len(hexPriKey)-1] // \n only represent 1 character
 
 	// hex to using
 	priKey, err := crypto.HexToECDSA(hexPriKey)
@@ -61,9 +62,6 @@ func SendingRawTransfer(ctx context.Context, client *ethclient.Client) {
 	gasLimit := uint64(21000)
 	tips := big.NewInt(2_000_000_000)    // max fee per gas 2-GWei
 	feeCap := big.NewInt(20_000_000_000) // 20-GWei
-	if err != nil {
-		log.Fatal(err)
-	}
 	var data []byte
 	chainId, err := client.NetworkID(ctx)
 	if err != nil {
@@ -93,5 +91,5 @@ func SendingRawTransfer(ctx context.Context, client *ethclient.Client) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("Finished sent transaction, with txHash :%s", signTx.Hash().Hex())
+	fmt.Printf("Finished sent transaction, with txHash: %s\n", signTx.Hash().Hex())
 }
