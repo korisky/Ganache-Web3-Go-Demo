@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/ethereum/go-ethereum/ethclient"
-	"quickNode/account"
-	"quickNode/transaction"
+	"quickNode/goerli/account"
+	"quickNode/goerli/transaction"
 )
 
 var (
@@ -15,6 +15,7 @@ var (
 	client, _ = ethclient.DialContext(ctx, url)
 )
 
+// from https://goethereumbook.org/client/
 func main() {
 
 	// get header number
@@ -27,4 +28,8 @@ func main() {
 
 	// call transaction
 	transaction.QueryTransactions(ctx, client)
+
+	// judge contract or address
+	account.JudgeAddressOrSmartContract(ctx, client, "0xe10eE98bB84B2073B88353e3AB4433916205DF40")
+	account.JudgeAddressOrSmartContract(ctx, client, "0xff02b7d59975E76F67B63b20b813a9Ec0f6AbD60")
 }

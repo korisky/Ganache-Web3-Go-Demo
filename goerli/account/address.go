@@ -24,3 +24,14 @@ func QueryBalance(ctx context.Context, client *ethclient.Client, hexAddress stri
 		fmt.Println("balance in Eth would be : " + ethValue.String() + "\n")
 	}
 }
+
+func JudgeAddressOrSmartContract(ctx context.Context, client *ethclient.Client, hexAddress string) {
+	address := common.HexToAddress(hexAddress)
+	bytes, err := client.CodeAt(context.Background(), address, nil) // nil is the latest block
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	isContract := len(bytes) > 0
+	fmt.Printf("is contract: %v\n", isContract)
+}
