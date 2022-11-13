@@ -25,7 +25,7 @@ func QueryBalance(ctx context.Context, client *ethclient.Client, hexAddress stri
 	}
 }
 
-func JudgeAddressOrSmartContract(ctx context.Context, client *ethclient.Client, hexAddress string) {
+func JudgeAddressOrSmartContract(client *ethclient.Client, hexAddress string) {
 	address := common.HexToAddress(hexAddress)
 	bytes, err := client.CodeAt(context.Background(), address, nil) // nil is the latest block
 	if err != nil {
