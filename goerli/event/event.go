@@ -27,16 +27,17 @@ func SubscribeErc1155SingleTransferEvent(ctx context.Context, client *ethclient.
 
 	// construct the event signature (quit different from Java)
 	eventName := "TransferSingle"
-	logTransferSingleSig := []byte(eventName + "{address,address,address,uint256,uint256}")
+	logTransferSingleSig := []byte(eventName + "(address,address,address,uint256,uint256)")
 	logTransferSingleSigHash := crypto.Keccak256(logTransferSingleSig)
 
 	fmt.Printf("event signature:%s", common.BytesToHash(logTransferSingleSigHash))
 
 	// add topics into query
 	filterQuery := ethereum.FilterQuery{
-		FromBlock: big.NewInt(7979219),
-		ToBlock:   big.NewInt(7979219),
+		FromBlock: big.NewInt(7962780),
+		ToBlock:   big.NewInt(7962780),
 		Topics:    [][]common.Hash{{common.BytesToHash(logTransferSingleSigHash)}},
+		//Topics: [][]common.Hash{{common.HexToHash("0xc3d58168c5ae7397731d063d5bbf3d657854427343f4c083240f7aacaa2d0f62")}},
 	}
 
 	// calling
@@ -45,6 +46,17 @@ func SubscribeErc1155SingleTransferEvent(ctx context.Context, client *ethclient.
 		log.Fatal(err)
 	}
 
-	fmt.Println(logs)
+	for _, vlogs := range logs {
+		fmt.Printf("Log Block Number: %d\n", vlogs.BlockNumber)
+		fmt.Printf("Log Index: %d\n", vlogs.Index)
+		fmt.Println()
 
+		sig := vlogs.Topics[0]
+		fmt.Printf("Event Signature: %s\n", sig)
+		fmt.Printf("Contract Address: %s\n", vlogs.Address.Hex())
+
+		var logTransferErc1155Single LogTransferErc1155Single
+		logTransferErc1155Single.From = common.HexToAddress(vlogs.Topics[2].Hex())
+		logTransferErc1155Single.To = common.HexToAddress(vlogs.Topics[3].Hex())
+	}
 }
