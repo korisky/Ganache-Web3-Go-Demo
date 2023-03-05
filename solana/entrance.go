@@ -2,18 +2,25 @@ package main
 
 import (
 	"github.com/portto/solana-go-sdk/client"
-	"quickNode/solana/transfer"
+	"github.com/portto/solana-go-sdk/rpc"
+	"net/http"
+	"quickNode/solana/balance"
+	"quickNode/solana/httpProxy"
 )
 
 var (
 	// own address account
-	address = "AnayTW335MabjhtXTJeBit5jdLhNeUVBVPXeRKCid79D"
-
+	address     = "AnayTW335MabjhtXTJeBit5jdLhNeUVBVPXeRKCid79D"
+	ownEndpoint = "https://solana-devnet.g.alchemy.com/v2/On35d8LdFc1QGYD-wCporecGj359qian"
 	// custom connection would be:
-	// cli := client.NewClient(rpc.DevnetRPCEndpoint, rpc.WithHTTPClient(customClietn))
-	cli = client.NewClient("https://solana-devnet.g.alchemy.com/v2/On35d8LdFc1QGYD-wCporecGj359qian")
+	// cli := client.New(rpc.withEndpoint(rpc.DevnetRPCEndpoint), rpc.WithHTTPClient(customClietn))
+	httpClient = &http.Client{
+		Transport: httpProxy.LoggingRoundTripper{Proxied: http.DefaultTransport},
+	}
+	cli = client.New(rpc.WithEndpoint(ownEndpoint), rpc.WithHTTPClient(httpClient))
 )
 
 func main() {
-	transfer.TryTransferSimple(cli, "")
+
+	balance.TryGetBalance(cli, address)
 }
