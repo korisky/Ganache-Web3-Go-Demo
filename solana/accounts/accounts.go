@@ -17,11 +17,12 @@ func TryCreateAccount() {
 }
 
 // TryRecoverAccount is for recover account info by input priKey in base 58
-func TryRecoverAccount(base58priKey string) {
+func TryRecoverAccount(base58priKey string) (types.Account, error) {
 	// recover by priKey
-	fromHex, err := types.AccountFromBase58(base58priKey)
+	account, err := types.AccountFromBase58(base58priKey)
 	if err != nil {
 		log.Fatalf("Error, %v/n", err)
 	}
-	fmt.Printf("\nRecover PubKey:%v", fromHex.PublicKey.ToBase58())
+	fmt.Printf("\nRecover PubKey:%v\n", account.PublicKey.ToBase58())
+	return account, err
 }

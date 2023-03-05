@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/portto/solana-go-sdk/client"
 	"quickNode/solana/accounts"
+	"quickNode/solana/balance"
 )
 
 var (
@@ -16,6 +17,8 @@ var (
 
 func main() {
 	// accounts related
-	accounts.TryCreateAccount()
-	accounts.TryRecoverAccount("")
+	account, err := accounts.TryRecoverAccount("")
+	if err == nil {
+		balance.TryRequestAirdrop(cli, account.PublicKey.ToBase58())
+	}
 }
