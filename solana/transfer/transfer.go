@@ -7,7 +7,7 @@ import (
 	"github.com/portto/solana-go-sdk/program/sysprog"
 	"github.com/portto/solana-go-sdk/types"
 	"log"
-	"quickNode/solana/accounts"
+	"web3Demo/solana/accounts"
 )
 
 // TryTransferSimple is for pure SOL transfer
