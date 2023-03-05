@@ -23,6 +23,6 @@ func TryRecoverAccount(base58priKey string) (types.Account, error) {
 	if err != nil {
 		log.Fatalf("Error, %v/n", err)
 	}
-	fmt.Printf("\nRecover PubKey:%v\n", account.PublicKey.ToBase58())
+	fmt.Printf("\nRecover PubKey: %v\n", account.PublicKey.ToBase58())
 	return account, err
 }
