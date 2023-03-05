@@ -12,8 +12,8 @@ func TryCreateAccount() {
 	// create
 	newAccount := types.NewAccount()
 	// printing
-	fmt.Printf("\nNew Account's PubKey: %v", newAccount.PublicKey.ToBase58())
-	fmt.Printf("\nNew Account's PriKey: %v", hex.EncodeToString(newAccount.PrivateKey))
+	fmt.Printf("New Account's PubKey: %v\n", newAccount.PublicKey.ToBase58())
+	fmt.Printf("New Account's PriKey: %v\n", hex.EncodeToString(newAccount.PrivateKey))
 }
 
 // TryRecoverAccount is for recover account info by input priKey in base 58
@@ -23,6 +23,6 @@ func TryRecoverAccount(base58priKey string) (types.Account, error) {
 	if err != nil {
 		log.Fatalf("Error, %v/n", err)
 	}
-	fmt.Printf("\nRecover PubKey: %v\n", account.PublicKey.ToBase58())
+	fmt.Printf("Recover PubKey: %v\n", account.PublicKey.ToBase58())
 	return account, err
 }

@@ -12,13 +12,12 @@ import (
 
 // TryTransferSimple is for pure SOL transfer
 func TryTransferSimple(cli *client.Client, base58priKey string) {
+	account, _ := accounts.TryRecoverAccount(base58priKey)
 	// 1. fetch recent block-hash
 	resp, err := cli.GetLatestBlockhash(context.Background())
 	if err != nil {
 		log.Fatalf("error: %v\n", err)
 	}
-	account, _ := accounts.TryRecoverAccount(base58priKey)
-
 	// 2. create msg
 	msg := types.NewMessage(types.NewMessageParam{
 		FeePayer:        account.PublicKey,
@@ -47,5 +46,5 @@ func TryTransferSimple(cli *client.Client, base58priKey string) {
 		log.Fatalf("error: %v\n", err)
 	}
 
-	fmt.Printf("\nOn-chain txHash: %v\n", txHash)
+	fmt.Printf("On-chain txHash: %v\n", txHash)
 }

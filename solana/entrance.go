@@ -4,7 +4,6 @@ import (
 	"github.com/portto/solana-go-sdk/client"
 	"github.com/portto/solana-go-sdk/rpc"
 	"net/http"
-	"quickNode/solana/balance"
 	"quickNode/solana/httpProxy"
 )
 
@@ -22,5 +21,4 @@ var (
 
 func main() {
 
-	balance.TryGetBalance(cli, address)
 }

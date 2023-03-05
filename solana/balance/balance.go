@@ -15,7 +15,7 @@ func TryGetBalance(cli *client.Client, pub string) {
 		log.Fatalf("Got error, %v\n", err)
 	}
 	// resp
-	fmt.Printf("\nAddress account balance would be: %v\n", balance)
+	fmt.Printf("Address account balance would be: %v\n", balance)
 }
 
 // TryRequestAirdrop is for request airdrop
@@ -26,5 +26,5 @@ func TryRequestAirdrop(cli *client.Client, pub string) {
 		log.Fatalf("Got error, %v\n", err)
 	}
 	// resp
-	fmt.Printf("Got txHash: %v for airdrop", txHash)
+	fmt.Printf("Got txHash: %v for airdrop\n", txHash)
 }
