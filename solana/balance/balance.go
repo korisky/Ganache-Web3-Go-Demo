@@ -1,4 +1,4 @@
-package main
+package balance
 
 import (
 	"context"
@@ -7,6 +7,7 @@ import (
 	"log"
 )
 
+// TryGetBalance could retry updated SOL remaining balance of an account
 func TryGetBalance(cli *client.Client, acc string) {
 	// try request
 	balance, err := cli.GetBalance(context.Background(), acc)
@@ -14,5 +15,5 @@ func TryGetBalance(cli *client.Client, acc string) {
 		log.Fatalf("Got error, %v\n", err)
 	}
 	// resp
-	fmt.Printf("Address account balance would be: %v\n", balance)
+	fmt.Printf("\nAddress account balance would be: %v\n", balance)
 }
