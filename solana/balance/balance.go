@@ -6,6 +6,7 @@ import (
 	"github.com/portto/solana-go-sdk/client"
 	"github.com/portto/solana-go-sdk/common"
 	"log"
+	"strconv"
 )
 
 // TryGetBalance could retry updated SOL remaining balance of an account
@@ -49,4 +50,15 @@ func TryFindAssociatedTokenAddress(account string, tokenAddress string) string {
 	}
 	fmt.Println("Account Token Address: ", ata.ToBase58())
 	return ata.ToBase58()
+}
+
+// TryGetAssociatedTokenAddressBalance try find associated token address & get the balance
+func TryGetAssociatedTokenAddressBalance(cli *client.Client, base58pubKey string, tokenAddress string) {
+	// 1. find associated-token-address by using pubKey & token-address
+	ata := TryFindAssociatedTokenAddress(base58pubKey, tokenAddress)
+	// 2. try to get token balance
+	tokenBalance, u := TryGetTokenBalance(cli, ata)
+	tokenBalanceStr := strconv.FormatUint(tokenBalance, 10)
+	fmt.Println("Token Balance in Raw: ", tokenBalanceStr)
+	fmt.Println("Token Decimals: ", int(u))
 }
