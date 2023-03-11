@@ -5,27 +5,10 @@ import (
 	"fmt"
 	"github.com/gagliardetto/solana-go/rpc"
 	"github.com/gagliardetto/solana-go/rpc/jsonrpc"
-	"net"
 	"net/http"
 	"time"
-	"web3Demo/solana/portto/httpProxy"
+	"web3Demo/solana/httpProxy"
 )
-
-func NewHTTPTransport(
-	timeout time.Duration,
-	maxIdleConnsPerHost int,
-	keepAlive time.Duration,
-) *http.Transport {
-	return &http.Transport{
-		IdleConnTimeout:     timeout,
-		MaxIdleConnsPerHost: maxIdleConnsPerHost,
-		Proxy:               http.ProxyFromEnvironment,
-		Dial: (&net.Dialer{
-			Timeout:   timeout,
-			KeepAlive: keepAlive,
-		}).Dial,
-	}
-}
 
 func NewHTTP(
 	timeout time.Duration,

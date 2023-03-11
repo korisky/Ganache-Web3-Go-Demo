@@ -3,9 +3,8 @@ package main
 import (
 	"github.com/portto/solana-go-sdk/client"
 	"github.com/portto/solana-go-sdk/rpc"
-	"net/http"
+	"web3Demo/solana/httpProxy"
 	"web3Demo/solana/portto/balance"
-	"web3Demo/solana/portto/httpProxy"
 )
 
 var (
@@ -14,11 +13,7 @@ var (
 	tokenAddress = "Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr"
 	ownEndpoint  = "https://solana-devnet.g.alchemy.com/v2/On35d8LdFc1QGYD-wCporecGj359qian"
 	// custom connection would be:
-	// cli := client.New(rpc.withEndpoint(rpc.DevnetRPCEndpoint), rpc.WithHTTPClient(customClietn))
-	httpClient = &http.Client{
-		Transport: httpProxy.LoggingRoundTripper{Proxied: http.DefaultTransport},
-	}
-	cli = client.New(rpc.WithEndpoint(ownEndpoint), rpc.WithHTTPClient(httpClient))
+	cli = client.New(rpc.WithEndpoint(ownEndpoint), rpc.WithHTTPClient(httpProxy.GetHttpClient()))
 )
 
 // main are following stuff from https://yihau.gitbook.io/solana-go/tour/create-token-account/associated-token-account
