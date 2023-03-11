@@ -9,6 +9,11 @@ import (
 	"strconv"
 )
 
+func TryGetAirdrop(cli *client.Client, pub string) {
+	resp, _ := cli.RequestAirdrop(context.TODO(), pub, 1e9)
+	fmt.Println("Airdrop txHash " + resp)
+}
+
 // TryGetBalance could retry updated SOL remaining balance of an account
 func TryGetBalance(cli *client.Client, pub string) {
 	// req

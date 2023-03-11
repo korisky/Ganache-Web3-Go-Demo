@@ -4,7 +4,6 @@ import (
 	"github.com/portto/solana-go-sdk/client"
 	"github.com/portto/solana-go-sdk/rpc"
 	"web3Demo/solana/httpProxy"
-	"web3Demo/solana/portto/balance"
 )
 
 var (
@@ -16,8 +15,8 @@ var (
 	cli = client.New(rpc.WithEndpoint(ownEndpoint), rpc.WithHTTPClient(httpProxy.GetHttpClient()))
 )
 
-// main are following stuff from https://yihau.gitbook.io/solana-go/tour/create-token-account/associated-token-account
+// main are following stuff from https://portto.github.io/solana-go-sdk/tour/token-transfer.html
 func main() {
-	balance.TryGetBalance(cli, accountAddress)
-	balance.TryGetAssociatedTokenAddressBalance(cli, accountAddress, tokenMintAddress)
+	//balance.TryGetBalance(cli, accountAddress)
+	//balance.TryGetAssociatedTokenAddressBalance(cli, accountAddress, tokenMintAddress)
 }
