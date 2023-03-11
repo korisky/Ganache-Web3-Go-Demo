@@ -4,8 +4,8 @@ import (
 	"github.com/portto/solana-go-sdk/client"
 	"github.com/portto/solana-go-sdk/rpc"
 	"net/http"
-	"web3Demo/solana/balance"
-	"web3Demo/solana/httpProxy"
+	"web3Demo/solana/portto/balance"
+	"web3Demo/solana/portto/httpProxy"
 )
 
 var (
