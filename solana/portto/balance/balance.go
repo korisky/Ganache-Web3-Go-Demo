@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 	"github.com/portto/solana-go-sdk/client"
-	"github.com/portto/solana-go-sdk/common"
 	"log"
 	"strconv"
+	"web3Demo/solana/portto/accounts"
 )
 
 func TryGetAirdrop(cli *client.Client, pub string) {
@@ -44,23 +44,10 @@ func TryRequestAirdrop(cli *client.Client, pub string) {
 	fmt.Printf("Got txHash: %v for airdrop\n", txHash)
 }
 
-// TryFindAssociatedTokenAddress is for find all tokenAccount for an AddressAccount
-func TryFindAssociatedTokenAddress(account string, tokenAddress string) string {
-	// req
-	ata, _, err := common.FindAssociatedTokenAddress(
-		common.PublicKeyFromString(account),
-		common.PublicKeyFromString(tokenAddress))
-	if err != nil {
-		log.Fatalf("find ata error, err: %v", err)
-	}
-	fmt.Println("Account Token Address: ", ata.ToBase58())
-	return ata.ToBase58()
-}
-
 // TryGetAssociatedTokenAddressBalance try find associated token address & get the balance
 func TryGetAssociatedTokenAddressBalance(cli *client.Client, base58pubKey string, tokenAddress string) {
 	// 1. find associated-token-address by using pubKey & token-address
-	ata := TryFindAssociatedTokenAddress(base58pubKey, tokenAddress)
+	ata := accounts.TryFindAssociatedTokenAddress(base58pubKey, tokenAddress)
 	// 2. try to get token balance
 	tokenBalance, u := TryGetTokenBalance(cli, ata)
 	tokenBalanceStr := strconv.FormatUint(tokenBalance, 10)

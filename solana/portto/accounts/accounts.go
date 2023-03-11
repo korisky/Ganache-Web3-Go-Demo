@@ -3,6 +3,7 @@ package accounts
 import (
 	"encoding/hex"
 	"fmt"
+	"github.com/portto/solana-go-sdk/common"
 	"github.com/portto/solana-go-sdk/types"
 	"log"
 )
@@ -25,4 +26,17 @@ func TryRecoverAccount(base58priKey string) (types.Account, error) {
 	}
 	fmt.Printf("Recover PubKey: %v\n", account.PublicKey.ToBase58())
 	return account, err
+}
+
+// TryFindAssociatedTokenAddress is for find all tokenAccount for an AddressAccount
+func TryFindAssociatedTokenAddress(account string, tokenAddress string) string {
+	// req
+	ata, _, err := common.FindAssociatedTokenAddress(
+		common.PublicKeyFromString(account),
+		common.PublicKeyFromString(tokenAddress))
+	if err != nil {
+		log.Fatalf("find ata error, err: %v", err)
+	}
+	fmt.Println("Account Token Address: ", ata.ToBase58())
+	return ata.ToBase58()
 }
