@@ -24,15 +24,15 @@ func main() {
 	//// call query balance
 	//account.QueryBalance(ctx, client, "0xe10eE98bB84B2073B88353e3AB4433916205DF40", nil)
 	//
-	//// call transaction
-	//transaction.QueryTransactions(ctx, client)
+	//// call transfer
+	//transfer.QueryTransactions(ctx, client)
 	//
 	//// judge contract or address
 	//account.JudgeAddressOrSmartContract(client, "0xe10eE98bB84B2073B88353e3AB4433916205DF40")
 	//account.JudgeAddressOrSmartContract(client, "0xff02b7d59975E76F67B63b20b813a9Ec0f6AbD60")
 	//
-	//// send raw transaction
-	//transaction.SendingRawTransfer(ctx, client)
+	//// send raw transfer
+	//transfer.SendingRawTransfer(ctx, client)
 
 	event.SubscribeErc1155SingleTransferEvent(ctx, client)
 

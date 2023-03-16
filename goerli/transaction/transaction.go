@@ -91,5 +91,5 @@ func SendingRawTransfer(ctx context.Context, client *ethclient.Client) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("Finished sent transaction, with txHash: %s\n", signTx.Hash().Hex())
+	fmt.Printf("Finished sent transfer, with txHash: %s\n", signTx.Hash().Hex())
 }
