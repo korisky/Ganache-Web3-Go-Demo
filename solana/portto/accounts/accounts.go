@@ -1,8 +1,11 @@
 package accounts
 
 import (
+	"context"
 	"encoding/hex"
 	"fmt"
+	"github.com/davecgh/go-spew/spew"
+	"github.com/portto/solana-go-sdk/client"
 	"github.com/portto/solana-go-sdk/common"
 	"github.com/portto/solana-go-sdk/types"
 	"log"
@@ -26,6 +29,11 @@ func TryRecoverAccount(base58priKey string) (types.Account, error) {
 	}
 	fmt.Printf("Recover PubKey: %v\n", account.PublicKey.ToBase58())
 	return account, err
+}
+
+func TryGetTokenAccountsByOwner(cli *client.Client, base58Address string) {
+	resp, _ := cli.GetTokenAccountsByOwner(context.Background(), base58Address)
+	spew.Dump(resp)
 }
 
 // TryFindAssociatedTokenAddress is for find all tokenAccount for an AddressAccount

@@ -4,7 +4,7 @@ import (
 	"github.com/portto/solana-go-sdk/client"
 	"github.com/portto/solana-go-sdk/rpc"
 	"web3Demo/solana/httpProxy"
-	"web3Demo/solana/portto/block"
+	"web3Demo/solana/portto/accounts"
 )
 
 var (
@@ -21,11 +21,16 @@ var (
 // main are following stuff from https://portto.github.io/solana-go-sdk/tour/token-transfer.html
 func main() {
 
+	//tokenBalance, u := balance.TryGetTokenBalance(cli, "Gd8nxWzbnJ2zwtn5TukvEMKKjjbFhdtqA1L67DgnRvXc")
+	//spew.Dump(tokenBalance, u)
+
+	accounts.TryGetTokenAccountsByOwner(cli, accountAddress)
+
 	//accounts.TryFindAssociatedTokenAddress(accountAddress, nftMintAddress)
 	//nft.TryDecodeNft(cli, nftMintAddress)
 
 	//transfer.TryTransferToken(cli, "", assTokenAccountAddress, tokenMintAddress)
 
-	block.TryGetBlockByBlockHeight(cli, 202616989)
+	//block.TryGetBlockByBlockHeight(cli, 202616989)
 
 }
