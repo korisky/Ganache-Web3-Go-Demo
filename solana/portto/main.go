@@ -1,8 +1,6 @@
 package main
 
 import (
-	"context"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/portto/solana-go-sdk/client"
 	"github.com/portto/solana-go-sdk/rpc"
 	"web3Demo/solana/httpProxy"
@@ -32,19 +30,26 @@ func main() {
 	//spew.Dump(tokenBalance, u)
 
 	// get all accounts by this owner
-	accounts.TryGetTokenAccountsByOwner(cli, accountAddress)
+	//accounts.TryGetTokenAccountsByOwner(cli, accountAddress)
 	// decode nft mint account
 	//nft.TryDecodeMetadata(cli, nftMintAddress)
 	//nft.TryDecodeMetadata(cli, nftCollectionMintAddress)
 
 	// decode token account
-	account, _ := cli.GetTokenAccount(context.Background(), assTokenAccountAddress)
-	spew.Dump(account)
+	//account, _ := cli.GetTokenAccount(context.Background(), assTokenAccountAddress)
+	//spew.Dump(account)
 
 	//accounts.TryFindAssociatedTokenAddress(accountAddress, nftMintAddress)
 
 	//transfer.TryTransferToken(cli, "", assTokenAccountAddress, tokenMintAddress)
 
-	//block.TryGetBlockByBlockHeight(cli, 202616989)
+	// decode block
+	//block := block.TryGetBlockByBlockHeight(cli, 202616989)
+	//spew.Dump(block)
 
+	// get txn
+	//transaction, _ := cli.GetTransaction(context.Background(), "2FjiGVncyv1SWpGsYVx2yYegUdipTtgWFMnU6kfjZVZF69Y2afyh6GJ6eLofjhkUSxCpdudJiqdLJbU7haynyugC")
+	//spew.Dump(transaction)R
+
+	accounts.TryFindTxnSigByOwnerAddress(cli, accountAddress, 10)
 }
