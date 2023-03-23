@@ -9,8 +9,8 @@ import (
 	"github.com/portto/solana-go-sdk/program/metaplex/token_metadata"
 )
 
-// TryDecodeNft try to decode nft metadata
-func TryDecodeNft(cli *client.Client, nftAccAddress string) {
+// TryDecodeMetadata try to decode nft metadata
+func TryDecodeMetadata(cli *client.Client, nftAccAddress string) {
 	// recover owner's meta account pub key
 	nftMinter := common.PublicKeyFromString(nftAccAddress)
 	nftMetaDataAccPubKey, _ := token_metadata.GetTokenMetaPubkey(nftMinter)

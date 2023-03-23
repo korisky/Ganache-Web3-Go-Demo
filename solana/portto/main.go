@@ -1,6 +1,8 @@
 package main
 
 import (
+	"context"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/portto/solana-go-sdk/client"
 	"github.com/portto/solana-go-sdk/rpc"
 	"web3Demo/solana/httpProxy"
@@ -32,8 +34,12 @@ func main() {
 	// get all accounts by this owner
 	accounts.TryGetTokenAccountsByOwner(cli, accountAddress)
 	// decode nft mint account
-	//nft.TryDecodeNft(cli, nftMintAddress)
-	//nft.TryDecodeNft(cli, nftCollectionMintAddress)
+	//nft.TryDecodeMetadata(cli, nftMintAddress)
+	//nft.TryDecodeMetadata(cli, nftCollectionMintAddress)
+
+	// decode token account
+	account, _ := cli.GetTokenAccount(context.Background(), assTokenAccountAddress)
+	spew.Dump(account)
 
 	//accounts.TryFindAssociatedTokenAddress(accountAddress, nftMintAddress)
 
