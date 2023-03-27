@@ -3,8 +3,8 @@ package main
 import (
 	"github.com/portto/solana-go-sdk/client"
 	"github.com/portto/solana-go-sdk/rpc"
-	"web3Demo/solana/httpProxy"
-	"web3Demo/solana/portto/accounts"
+	"self/solana.demo/m/httpProxy"
+	"self/solana.demo/m/portto/accounts"
 )
 
 var (
@@ -22,7 +22,7 @@ var (
 // main are following stuff from https://portto.github.io/solana-go-sdk/tour/token-transfer.html
 func main() {
 
-	//accounts.TryFindAssociatedTokenAddress("GCTFHbBcLs3vsNkCKLz2uCq5boZhMHbuawuFuhbYttc8", tokenMintAddress)
+	accounts.TryFindAssociatedTokenAddress("GCTFHbBcLs3vsNkCKLz2uCq5boZhMHbuawuFuhbYttc8", tokenMintAddress)
 
 	//balance.TryGetBalance(cli, accountAddress)
 
@@ -51,5 +51,10 @@ func main() {
 	//transaction, _ := cli.GetTransaction(context.Background(), "2FjiGVncyv1SWpGsYVx2yYegUdipTtgWFMnU6kfjZVZF69Y2afyh6GJ6eLofjhkUSxCpdudJiqdLJbU7haynyugC")
 	//spew.Dump(transaction)R
 
-	accounts.TryFindTxnSigByOwnerAddress(cli, accountAddress, 10)
+	//accounts.TryFindTxnSigByOwnerAddress(cli, accountAddress, 10)
+
+	//associatedAccounts, _ := cli.GetTokenAccountsByOwner(context.Background(), accountAddress)
+	//spew.Dump(associatedAccounts)
+	//config, _ := cli.GetSignaturesForAddressWithConfig(context.Background(), "AnayTW335MabjhtXTJeBit5jdLhNeUVBVPXeRKCid79D", rpc.GetSignaturesForAddressConfig{Limit: 10})
+	//spew.Dump(config)
 }
