@@ -3,8 +3,8 @@ package main
 import (
 	"github.com/portto/solana-go-sdk/client"
 	"github.com/portto/solana-go-sdk/rpc"
-	"self/solana.demo/m/httpProxy"
-	"self/solana.demo/m/portto/accounts"
+	"web3Demo/solana/httpProxy"
+	"web3Demo/solana/portto/accounts"
 )
 
 var (
