@@ -13,8 +13,7 @@ var (
 	tokenMintAddress         = "Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr"
 	nftMintAddress           = "EZqtsCxYpYtNaX1Pd2ep3ZUVxS6qHLVQriugvbKGEahk"
 	nftCollectionMintAddress = "ARHE7qXefr79DqyApiEkZ2QwnyzfAnUew4jRXfkMBVT2"
-	//ownEndpoint              = "https://solana-devnet.g.alchemy.com/v2/On35d8LdFc1QGYD-wCporecGj359qian"
-	ownEndpoint = "https://solana-mainnet.g.alchemy.com/v2/LoSsmI5Mt0lWufIzKRRq5Ct8IVNUQvdE"
+	ownEndpoint              = "https://solana-devnet.g.alchemy.com/v2/On35d8LdFc1QGYD-wCporecGj359qian"
 	// custom connection would be:
 	cli = client.New(rpc.WithEndpoint(ownEndpoint), rpc.WithHTTPClient(httpProxy.GetHttpClient()))
 )
