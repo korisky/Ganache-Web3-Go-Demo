@@ -3,8 +3,7 @@ package main
 import (
 	"github.com/portto/solana-go-sdk/client"
 	"github.com/portto/solana-go-sdk/rpc"
-	"web3Demo/solana/httpProxy"
-	"web3Demo/solana/portto/accounts"
+	"web3Demo/httpProxy"
 )
 
 var (
@@ -14,7 +13,8 @@ var (
 	tokenMintAddress         = "Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr"
 	nftMintAddress           = "EZqtsCxYpYtNaX1Pd2ep3ZUVxS6qHLVQriugvbKGEahk"
 	nftCollectionMintAddress = "ARHE7qXefr79DqyApiEkZ2QwnyzfAnUew4jRXfkMBVT2"
-	ownEndpoint              = "https://solana-devnet.g.alchemy.com/v2/On35d8LdFc1QGYD-wCporecGj359qian"
+	//ownEndpoint              = "https://solana-devnet.g.alchemy.com/v2/On35d8LdFc1QGYD-wCporecGj359qian"
+	ownEndpoint = "https://solana-mainnet.g.alchemy.com/v2/LoSsmI5Mt0lWufIzKRRq5Ct8IVNUQvdE"
 	// custom connection would be:
 	cli = client.New(rpc.WithEndpoint(ownEndpoint), rpc.WithHTTPClient(httpProxy.GetHttpClient()))
 )
@@ -22,7 +22,7 @@ var (
 // main are following stuff from https://portto.github.io/solana-go-sdk/tour/token-transfer.html
 func main() {
 
-	accounts.TryFindAssociatedTokenAddress("GCTFHbBcLs3vsNkCKLz2uCq5boZhMHbuawuFuhbYttc8", tokenMintAddress)
+	//accounts.TryFindAssociatedTokenAddress("GCTFHbBcLs3vsNkCKLz2uCq5boZhMHbuawuFuhbYttc8", tokenMintAddress)
 
 	//balance.TryGetBalance(cli, accountAddress)
 
@@ -30,16 +30,21 @@ func main() {
 	//spew.Dump(tokenBalance, u)
 
 	// get all accounts by this owner
-	//accounts.TryGetTokenAccountsByOwner(cli, accountAddress)
+	//accounts.TryGetTokenAccountsByOwner(cli, "6JtKTjiumR3GiXp1fXgjDWgQZLHEfv3WTMuR9fNRLhun")
+
+	// get account info
+	//info, _ := cli.GetAccountInfo(context.Background(), "9sMYz9FYrzkpVKqG55yVproUdMmGNxAoM7z9637gwDuh")
+	//spew.Dump(info)
+
 	// decode nft mint account
-	//nft.TryDecodeMetadata(cli, nftMintAddress)
+	//nft.TryDecodeMetadata(cli, "9sMYz9FYrzkpVKqG55yVproUdMmGNxAoM7z9637gwDuh")
 	//nft.TryDecodeMetadata(cli, nftCollectionMintAddress)
 
 	// decode token account
 	//account, _ := cli.GetTokenAccount(context.Background(), assTokenAccountAddress)
 	//spew.Dump(account)
 
-	//accounts.TryFindAssociatedTokenAddress(accountAddress, nftMintAddress)
+	//accounts.TryFindAssociatedTokenAddress("GQ6V9ZLVibN7eAtxEQxLJjXX8L9RybMJPpUCwi16vVgL", tokenMintAddress)
 
 	//transfer.TryTransferToken(cli, "", assTokenAccountAddress, tokenMintAddress)
 

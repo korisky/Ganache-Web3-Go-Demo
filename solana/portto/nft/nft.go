@@ -10,9 +10,9 @@ import (
 )
 
 // TryDecodeMetadata try to decode nft metadata
-func TryDecodeMetadata(cli *client.Client, nftAccAddress string) {
+func TryDecodeMetadata(cli *client.Client, nftMintAccount string) {
 	// recover owner's meta account pub key
-	nftMinter := common.PublicKeyFromString(nftAccAddress)
+	nftMinter := common.PublicKeyFromString(nftMintAccount)
 	nftMetaDataAccPubKey, _ := token_metadata.GetTokenMetaPubkey(nftMinter)
 
 	// if we put user's account + nft token's mint account -> we could figure out the result of them are same

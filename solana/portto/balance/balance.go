@@ -6,7 +6,7 @@ import (
 	"github.com/portto/solana-go-sdk/client"
 	"log"
 	"strconv"
-	"web3Demo/solana/portto/accounts"
+	"web3Demo/portto/accounts"
 )
 
 func TryGetAirdrop(cli *client.Client, pub string) {
