@@ -15,9 +15,14 @@ func Test_GetAllAssociatedTokenAccountByOwner(t *testing.T) {
 	accounts.TryGetTokenAccountsByOwner(cli, accountAddress)
 }
 
+// Test_TryFindAssociatedTokenAddress is about derived associated token address by input owner address & token mint address
+func Test_TryFindAssociatedTokenAddress(t *testing.T) {
+	accounts.TryFindAssociatedTokenAddress("GQ6V9ZLVibN7eAtxEQxLJjXX8L9RybMJPpUCwi16vVgL", usdcTokenMintAddress)
+}
+
 // Test_AccountInfo get token info -> could find out -> token & nft data length different
 func Test_AccountInfo(t *testing.T) {
-	token_info, _ := cli.GetAccountInfo(context.Background(), tokenMintAddress)
+	token_info, _ := cli.GetAccountInfo(context.Background(), usdcTokenMintAddress)
 	spew.Dump(token_info)
 	fmt.Println()
 	nft_info, _ := cli.GetAccountInfo(context.Background(), nftMintAddress)
