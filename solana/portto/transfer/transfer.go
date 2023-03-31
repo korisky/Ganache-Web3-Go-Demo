@@ -9,11 +9,11 @@ import (
 	"github.com/portto/solana-go-sdk/program/token"
 	"github.com/portto/solana-go-sdk/types"
 	"log"
-	"web3Demo/solana/portto/accounts"
+	"web3Demo/portto/accounts"
 )
 
 // TryTransferSol is for pure SOL transfer
-func TryTransferSol(cli *client.Client, base58priKey string) {
+func TryTransferSol(cli *client.Client, base58priKey, toBase58PubKey string) string {
 	account, _ := accounts.TryRecoverAccount(base58priKey)
 	// 1. fetch recent block-hash
 	resp, err := cli.GetLatestBlockhash(context.Background())
@@ -27,8 +27,8 @@ func TryTransferSol(cli *client.Client, base58priKey string) {
 		Instructions: []types.Instruction{
 			sysprog.Transfer(sysprog.TransferParam{
 				From:   account.PublicKey,
-				To:     account.PublicKey,
-				Amount: 5000,
+				To:     common.PublicKeyFromString(toBase58PubKey),
+				Amount: 3500,
 			}),
 		},
 	})
@@ -47,6 +47,7 @@ func TryTransferSol(cli *client.Client, base58priKey string) {
 	}
 
 	fmt.Printf("On-chain txHash: %v\n", txHash)
+	return txHash
 }
 
 // TryTransferToken is for transfer the token with instruction in msg
