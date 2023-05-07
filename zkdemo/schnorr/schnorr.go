@@ -14,17 +14,25 @@ func GenerateKeyPair(curve elliptic.Curve) ([]byte, *big.Int, *big.Int) {
 }
 
 // SignSchnorr is for sign under schnorr algorithms' procedure
-func SignSchnorr(curve elliptic.Curve, priKey []byte, x, y *big.Int, msg []byte) (r, s *big.Int) {
+func SignSchnorr(curve elliptic.Curve, privateKey []byte, msg []byte) (r, s *big.Int) {
 	hash := sha256.Sum256(msg)
 	e := new(big.Int).SetBytes(hash[:])
 	for {
 		k, _ := rand.Int(rand.Reader, curve.Params().N)
-		r, _ := curve.ScalarBaseMult(k.Bytes())
-		s = new(big.Int).Mul(new(big.Int).SetBytes(priKey), r)
-		s.Add(s, new(big.Int).Mul(k, e))
+		kGx, _ := curve.ScalarBaseMult(k.Bytes())
+		r = new(big.Int).Mod(kGx, curve.Params().N)
+
+		if r.Sign() == 0 {
+			continue
+		}
+
+		kInv := new(big.Int).ModInverse(k, curve.Params().N)
+		temp := new(big.Int).Mul(new(big.Int).SetBytes(privateKey), r)
+		temp.Add(temp, e)
+		s = temp.Mul(temp, kInv)
 		s.Mod(s, curve.Params().N)
 
-		if r.Sign() != 0 && s.Sign() != 0 {
+		if s.Sign() != 0 {
 			break
 		}
 	}
@@ -32,9 +40,9 @@ func SignSchnorr(curve elliptic.Curve, priKey []byte, x, y *big.Int, msg []byte)
 }
 
 // VerifySchnorr is for verifying
-func VerifySchnorr(curve elliptic.Curve, publicKeyX, publicKeyY *big.Int, msg []byte, signature *big.Int) bool {
-	r, s := signature, signature
-	if r.Cmp(curve.Params().N) > 0 || s.Cmp(curve.Params().N) >= 0 {
+func VerifySchnorr(curve elliptic.Curve, publicKeyX, publicKeyY *big.Int, msg []byte, r, s *big.Int) bool {
+
+	if r.Cmp(curve.Params().N) >= 0 || s.Cmp(curve.Params().N) >= 0 {
 		return false
 	}
 
