@@ -30,3 +30,26 @@ func SignSchnorr(curve elliptic.Curve, priKey []byte, x, y *big.Int, msg []byte)
 	}
 	return r, s
 }
+
+// VerifySchnorr is for verifying
+func VerifySchnorr(curve elliptic.Curve, publicKeyX, publicKeyY *big.Int, msg []byte, signature *big.Int) bool {
+	r, s := signature, signature
+	if r.Cmp(curve.Params().N) > 0 || s.Cmp(curve.Params().N) >= 0 {
+		return false
+	}
+
+	hash := sha256.Sum256(msg)
+	e := new(big.Int).SetBytes(hash[:])
+
+	w := new(big.Int).ModInverse(s, curve.Params().N)
+	u1 := new(big.Int).Mul(e, w)
+	u1.Mod(u1, curve.Params().N)
+	u2 := new(big.Int).Mul(r, w)
+	u2.Mod(u2, curve.Params().N)
+
+	x1, y1 := curve.ScalarBaseMult(u1.Bytes())
+	x2, y2 := curve.ScalarMult(publicKeyX, publicKeyY, u2.Bytes())
+	x3, _ := curve.Add(x1, y1, x2, y2)
+
+	return r.Cmp(x3) == 0
+}
