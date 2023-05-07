@@ -15,17 +15,25 @@ func GenerateKeyPair(curve elliptic.Curve) ([]byte, *big.Int, *big.Int) {
 
 // SignSchnorr is for sign under schnorr algorithms' procedure
 func SignSchnorr(curve elliptic.Curve, privateKey []byte, msg []byte) (r, s *big.Int) {
+	// get hash bytes of the msg and convert to a fixed length digest
 	hash := sha256.Sum256(msg)
 	e := new(big.Int).SetBytes(hash[:])
-	for {
-		k, _ := rand.Int(rand.Reader, curve.Params().N)
-		kGx, _ := curve.ScalarBaseMult(k.Bytes())
-		r = new(big.Int).Mod(kGx, curve.Params().N)
 
+	for {
+		// Generate a random nonce 'k' in the range [1, n-1], where 'n' is the order of the curve
+		k, _ := rand.Int(rand.Reader, curve.Params().N)
+
+		// Compute the point (kGx, kGy) = k * G, where G is the base point of the curve
+		kGx, _ := curve.ScalarBaseMult(k.Bytes())
+
+		// Set 'r' as the x-coordinate of the point -> (kGx, kGy) modulo n
+		// in some case r would result in 0, need to loop to try another random k
+		r = new(big.Int).Mod(kGx, curve.Params().N)
 		if r.Sign() == 0 {
 			continue
 		}
 
+		// Calculate the modular inverse of k
 		kInv := new(big.Int).ModInverse(k, curve.Params().N)
 		temp := new(big.Int).Mul(new(big.Int).SetBytes(privateKey), r)
 		temp.Add(temp, e)
