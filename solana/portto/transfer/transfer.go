@@ -2,6 +2,7 @@ package transfer
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/binary"
 	"fmt"
 	"github.com/portto/solana-go-sdk/client"
@@ -21,6 +22,7 @@ func DecodeNativeTransferAmount(instruction types.CompiledInstruction) (uint64, 
 	if instruction.ProgramIDIndex == 1 {
 		// SOL Transfer
 		// first 1 byte is for the index, next 3 bytes are padding
+		fmt.Println(base64.StdEncoding.EncodeToString(data))
 		return binary.LittleEndian.Uint64(data[4:]), nil
 	}
 
