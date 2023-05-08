@@ -2,6 +2,7 @@ package transfer
 
 import (
 	"context"
+	"encoding/binary"
 	"fmt"
 	"github.com/portto/solana-go-sdk/client"
 	"github.com/portto/solana-go-sdk/common"
@@ -11,6 +12,22 @@ import (
 	"log"
 	"web3Demo/portto/accounts"
 )
+
+// DecodeNativeTransferAmount is about decoding native transfer's amount inside the transaction
+func DecodeNativeTransferAmount(data []byte) (uint64, error) {
+
+	if len(data) < 9 {
+		return 0, fmt.Errorf("Insufficient data")
+	}
+
+	instructionIndex := data[0]
+	if instructionIndex != 2 {
+		return 0, fmt.Errorf("In correct instrcution index, expect 2")
+	}
+
+	// first 1 byte is for the index, next 3 bytes are padding
+	return binary.LittleEndian.Uint64(data[4:]), nil
+}
 
 // TryTransferSol is for pure SOL transfer
 func TryTransferSol(cli *client.Client, base58priKey, toBase58PubKey string) string {

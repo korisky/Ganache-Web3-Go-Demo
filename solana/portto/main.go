@@ -48,14 +48,22 @@ func main() {
 	//block := block.TryGetBlockByBlockHeight(cli, 202616989)
 	//spew.Dump(block)
 
-	// get txn
-	//transaction, _ := cli.GetTransaction(context.Background(), "2FjiGVncyv1SWpGsYVx2yYegUdipTtgWFMnU6kfjZVZF69Y2afyh6GJ6eLofjhkUSxCpdudJiqdLJbU7haynyugC")
-	//spew.Dump(transaction)R
-
 	//accounts.TryFindTxnSigByOwnerAddress(cli, accountAddress, 10)
 
 	//associatedAccounts, _ := cli.GetTokenAccountsByOwner(context.Background(), accountAddress)
 	//spew.Dump(associatedAccounts)
 	//config, _ := cli.GetSignaturesForAddressWithConfig(context.Background(), "AnayTW335MabjhtXTJeBit5jdLhNeUVBVPXeRKCid79D", rpc.GetSignaturesForAddressConfig{Limit: 10})
 	//spew.Dump(config)
+
+	// get txn
+	//transaction, _ := cli.GetTransaction(context.Background(), "41ZCAJiXCHmXjtGTm5VtB5q1F1eWoGa84xBBiErdDsqf7K3m2yn4GACjuXzimMg6zjtGA2MGuu9gPRmRqA6bV3ka")
+	////transaction, _ := cli.GetTransaction(context.Background(), "2BghzZxWRXR7zy9by3GHGhi32yYbrwY59ivvdNzfMCcuHJ3FyFVkLy7bxkxKqcdrKVpaszvdSoCrjPSyAgMQiTts")
+	//for _, instruction := range transaction.Transaction.Message.Instructions {
+	//	transferInstruction, _ := decodeTransferInstruction(instruction.Data)
+	//	if nil != transferInstruction {
+	//		fmt.Printf("Amount %v", transferInstruction.Amount)
+	//	}
+	//}
+	//
+	//spew.Dump(transaction)
 }
