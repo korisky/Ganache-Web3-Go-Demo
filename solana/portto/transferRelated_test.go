@@ -20,13 +20,46 @@ func Test_TransferSol(t *testing.T) {
 // Test_DecodingAmount
 func Test_DecodingAmount(t *testing.T) {
 
-	//transaction, _ := cli.GetTransaction(context.Background(), "41ZCAJiXCHmXjtGTm5VtB5q1F1eWoGa84xBBiErdDsqf7K3m2yn4GACjuXzimMg6zjtGA2MGuu9gPRmRqA6bV3ka")
-	transaction, _ := cli.GetTransaction(context.Background(), "2BghzZxWRXR7zy9by3GHGhi32yYbrwY59ivvdNzfMCcuHJ3FyFVkLy7bxkxKqcdrKVpaszvdSoCrjPSyAgMQiTts")
+	//transaction, _ := cli.GetTransaction(context.Background(), "41ZCAJiXCHmXjtGTm5VtB5q1F1eWoGa84xBBiErdDsqf7K3m2yn4GACjuXzimMg6zjtGA2MGuu9gPRmRqA6bV3ka") // sol
+	transaction, _ := cli.GetTransaction(context.Background(), "4JQVvVJ3QQaBosMDUB7S9D3xRujgcb47jpdyXiUt9us5j5YjWTg9x6sHhpaPagsETZ5hPMVJR3LQ1SBnp4YCyHti") // spl
 
 	for _, instruction := range transaction.Transaction.Message.Instructions {
-		amount, err := transfer.DecodeNativeTransferAmount(instruction.Data)
+		amount, err := transfer.DecodeNativeTransferAmount(instruction)
 		if nil == err {
-			fmt.Printf("Decode transaction with amount: %v \n", float64(amount)/math.Pow10(9))
+
+			var realAmount float64
+			if instruction.ProgramIDIndex == 1 {
+				// for SOL transfer
+				realAmount = float64(amount) / math.Pow10(9)
+
+			} else if instruction.ProgramIDIndex == 4 {
+
+				// for SPL transfer
+				preTokenBalances := transaction.Meta.PreTokenBalances
+				postTokenBalances := transaction.Meta.PostTokenBalances
+
+				var decimal uint8
+				for _, balance := range preTokenBalances {
+					if balance.Owner == "AnayTW335MabjhtXTJeBit5jdLhNeUVBVPXeRKCid79D" {
+						decimal = balance.UITokenAmount.Decimals
+						break
+					}
+				}
+				if 0 == decimal {
+					for _, balance := range postTokenBalances {
+						if balance.Owner == "AnayTW335MabjhtXTJeBit5jdLhNeUVBVPXeRKCid79D" {
+							decimal = balance.UITokenAmount.Decimals
+							break
+						}
+					}
+				}
+
+				if 0 != decimal {
+					realAmount = float64(amount) / math.Pow10(int(decimal))
+				}
+			}
+
+			fmt.Printf("Decode transaction with amount: %v \n", realAmount)
 		}
 	}
 }

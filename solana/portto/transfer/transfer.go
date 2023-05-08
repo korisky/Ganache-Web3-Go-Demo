@@ -14,19 +14,23 @@ import (
 )
 
 // DecodeNativeTransferAmount is about decoding native transfer's amount inside the transaction
-func DecodeNativeTransferAmount(data []byte) (uint64, error) {
+func DecodeNativeTransferAmount(instruction types.CompiledInstruction) (uint64, error) {
 
-	if len(data) < 9 {
-		return 0, fmt.Errorf("Insufficient data")
+	data := instruction.Data
+
+	if instruction.ProgramIDIndex == 1 {
+		// SOL Transfer
+		// first 1 byte is for the index, next 3 bytes are padding
+		return binary.LittleEndian.Uint64(data[4:]), nil
 	}
 
-	instructionIndex := data[0]
-	if instructionIndex != 2 {
-		return 0, fmt.Errorf("In correct instrcution index, expect 2")
+	if instruction.ProgramIDIndex == 4 {
+		// SPL Transfer
+		return binary.LittleEndian.Uint64(data[1:]), nil
 	}
 
-	// first 1 byte is for the index, next 3 bytes are padding
-	return binary.LittleEndian.Uint64(data[4:]), nil
+	// not care
+	return 0, fmt.Errorf("No related to Transfer")
 }
 
 // TryTransferSol is for pure SOL transfer
