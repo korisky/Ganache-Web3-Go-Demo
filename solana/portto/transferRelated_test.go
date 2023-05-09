@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/davecgh/go-spew/spew"
 	"math"
 	"testing"
 	"web3Demo/portto/transfer"
@@ -20,8 +21,10 @@ func Test_TransferSol(t *testing.T) {
 // Test_DecodingAmount
 func Test_DecodingAmount(t *testing.T) {
 
-	transaction, _ := cli.GetTransaction(context.Background(), "41ZCAJiXCHmXjtGTm5VtB5q1F1eWoGa84xBBiErdDsqf7K3m2yn4GACjuXzimMg6zjtGA2MGuu9gPRmRqA6bV3ka") // sol
-	//transaction, _ := cli.GetTransaction(context.Background(), "4JQVvVJ3QQaBosMDUB7S9D3xRujgcb47jpdyXiUt9us5j5YjWTg9x6sHhpaPagsETZ5hPMVJR3LQ1SBnp4YCyHti") // spl
+	//transaction, _ := cli.GetTransaction(context.Background(), "41ZCAJiXCHmXjtGTm5VtB5q1F1eWoGa84xBBiErdDsqf7K3m2yn4GACjuXzimMg6zjtGA2MGuu9gPRmRqA6bV3ka") // sol-self
+	//transaction, _ := cli.GetTransaction(context.Background(), "4JQVvVJ3QQaBosMDUB7S9D3xRujgcb47jpdyXiUt9us5j5YjWTg9x6sHhpaPagsETZ5hPMVJR3LQ1SBnp4YCyHti") // spl-self
+	transaction, _ := cli.GetTransaction(context.Background(), "5Q5upfHBHLNH7ScCwLfEFc8iXD2RKNJYmK2f8hg7eqxGBjtGLcgxQS3GrJhH8eYc3kuXY9X5VQEA9cvPxWs1RzZ4") // spl-dif
+	spew.Dump(transaction)
 
 	for _, instruction := range transaction.Transaction.Message.Instructions {
 		amount, err := transfer.DecodeNativeTransferAmount(instruction)
