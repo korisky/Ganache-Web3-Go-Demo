@@ -5,7 +5,6 @@ import (
 	"context"
 	"encoding/binary"
 	"fmt"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/portto/solana-go-sdk/client"
 	"github.com/portto/solana-go-sdk/common"
 	"github.com/portto/solana-go-sdk/types"
@@ -31,14 +30,16 @@ func decodeTxnInput(transaction *client.GetTransactionResponse) (uint64, uint8) 
 	accounts := message.Accounts
 
 	// 1. for SOL transfer checking
-	if len(message.Instructions) == 1 {
-		data := message.Instructions[0].Data
-		return binary.LittleEndian.Uint64(data[4:]), 9
+	if len(message.Instructions) == 1 && len(message.Instructions[0].Data) >= 12 {
+		if strings.EqualFold(accounts[message.Instructions[0].ProgramIDIndex].ToBase58(), common.SystemProgramID.ToBase58()) {
+			data := message.Instructions[0].Data
+			return binary.LittleEndian.Uint64(data[4:]), 9
+		}
 	}
 
 	// 2. for SPL simple transfer checking
 	// filter for all tokenProgram related instructions
-	tokenProgramInstructions := make([]types.CompiledInstruction, len(message.Instructions))
+	tokenProgramInstructions := make([]types.CompiledInstruction, 0)
 	for _, instruction := range message.Instructions {
 
 		if strings.EqualFold(accounts[instruction.ProgramIDIndex].ToBase58(), common.TokenProgramID.ToBase58()) {
@@ -70,7 +71,7 @@ func Test_DecodingAmount(t *testing.T) {
 	transaction, _ := cli.GetTransaction(context.Background(), "4JQVvVJ3QQaBosMDUB7S9D3xRujgcb47jpdyXiUt9us5j5YjWTg9x6sHhpaPagsETZ5hPMVJR3LQ1SBnp4YCyHti") // spl-self
 	//transaction, _ := cli.GetTransaction(context.Background(), "5Q5upfHBHLNH7ScCwLfEFc8iXD2RKNJYmK2f8hg7eqxGBjtGLcgxQS3GrJhH8eYc3kuXY9X5VQEA9cvPxWs1RzZ4") // spl-dif
 	//transaction, _ := cli.GetTransaction(context.Background(), "5T2KkZ9fH9J1qbeTS1MhXVYjDfXoGVrAJrYrVEPmrLoSiUzn6xqGS264tphX6xCnN8zWF4ZrRkBphGfimExpEPQd") // spl-nft
-	spew.Dump(transaction)
+	//spew.Dump(transaction)
 
 	amt, decimal := decodeTxnInput(transaction)
 	fmt.Printf("\n\n Got amt:%v, decimal:%v\n\n", amt, decimal)
