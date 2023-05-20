@@ -6,8 +6,8 @@ import (
 	"testing"
 )
 
-// Test_SchnorrDemonstration is a demonstration for Schnorr Algorithm
-func Test_SchnorrDemonstration(t *testing.T) {
+// Test_NonInteractiveSchnorr is a demonstration for Schnorr Algorithm
+func Test_NonInteractiveSchnorr(t *testing.T) {
 
 	// choose a elliptic curve & generate a key value pair under this curve
 	curve := elliptic.P256()
