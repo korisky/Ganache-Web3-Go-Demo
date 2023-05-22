@@ -16,7 +16,7 @@ var (
 func Test_Eth2Connection(t *testing.T) {
 
 	// create client
-	ctx, _ := context.WithCancel(context.Background())
+	ctx, cancel := context.WithCancel(context.Background())
 	client, err := http.New(ctx, http.WithAddress(nodeUrl), http.WithLogLevel(zerolog.DebugLevel))
 	if err != nil {
 		panic(err)
@@ -32,4 +32,7 @@ func Test_Eth2Connection(t *testing.T) {
 		fmt.Printf("Genesis time is %v\n\n", genesis.GenesisTime)
 	}
 
+	// cancelling the context passed to New() frees up resources held by the
+	// client, closes connections, clears handlers, etc.
+	cancel()
 }
