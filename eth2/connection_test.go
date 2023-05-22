@@ -3,6 +3,7 @@ package eth2
 import (
 	"context"
 	"fmt"
+	eth2client "github.com/attestantio/go-eth2-client"
 	"github.com/attestantio/go-eth2-client/http"
 	"github.com/rs/zerolog"
 	"testing"
@@ -20,8 +21,15 @@ func Test_Eth2Connection(t *testing.T) {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("Connected to %s\n", client.Name())
+	fmt.Printf("\nConnected to %s\n", client.Name())
 
-	//
+	// client functions have their own interfaces, not all functions are supported by all clients
+	if provider, isProvider := client.(eth2client.GenesisProvider); isProvider {
+		genesis, err := provider.Genesis(ctx)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Printf("Genesis time is %v\n\n", genesis.GenesisTime)
+	}
 
 }
