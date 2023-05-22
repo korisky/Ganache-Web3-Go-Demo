@@ -4,6 +4,7 @@ go 1.20
 
 require (
 	github.com/attestantio/go-eth2-client v0.16.3
+	github.com/davecgh/go-spew v1.1.1
 	github.com/rs/zerolog v1.29.1
 )
 
