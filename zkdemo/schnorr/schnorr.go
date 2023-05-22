@@ -55,8 +55,8 @@ func SignSchnorr(curve elliptic.Curve, privateKey []byte, msg []byte) (r, s *big
 		// Compute s = (privateKey * r + e) * k^-1 mod n
 		// 由于后续的验证, 是通过验证 s * G = R + e * PublicKey 可以推导 ->
 		// 							   	      s * G = R + e * PublicKey
-		//          (privateKey * r + e) * k^-1 * G = R + e * PublicKey   -> 由于 R = k * G
-		// privateKey * r * k^-1 * G + e * k^-1 * G = R + e * PublicKey   -> 由于 k^-1 * G = R 和 privateKey * G = PublicKey
+		//          (privateKey * r + e)/k * G = R + e * PublicKey   -> 由于 R = k * G
+		// privateKey * r * k^-1 * G + e * k * G = R + e * PublicKey   -> 由于 k^-1 * G = R 和 privateKey * G = PublicKey
 		// 					  PublicKey * R + e * R = R + e * PublicKey
 
 		temp := new(big.Int).Mul(new(big.Int).SetBytes(privateKey), r)
