@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"github.com/ethereum/go-ethereum/ethclient"
-	"web3Demo/goerli/event"
+	"own.goerli.demo/event"
 )
 
 var (
