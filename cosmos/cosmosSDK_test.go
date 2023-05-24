@@ -45,16 +45,19 @@ func Test_getStatusGRpc(t *testing.T) {
 		log.Fatalf("failed to dial: %v", err)
 	}
 
-	defer conn.Close()
+	defer func(conn *grpc.ClientConn) {
+		err := conn.Close()
+		if err != nil {
+			return
+		}
+	}(conn)
 
 	tmClient := tmservice.NewServiceClient(conn)
 
 	request := tmservice.GetLatestBlockRequest{}
-
 	res, err := tmClient.GetLatestBlock(context.Background(), &request)
 	if err != nil {
 		log.Fatalf("Failed to get the latest block: %v", err)
 	}
-
 	log.Println("Latest block height:", res.Block.Header.Height)
 }
