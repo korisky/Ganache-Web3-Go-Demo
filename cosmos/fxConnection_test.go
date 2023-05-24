@@ -2,33 +2,34 @@ package cosmos
 
 import (
 	"context"
+	"crypto/tls"
 	"github.com/cosmos/cosmos-sdk/client/grpc/tmservice"
-	"github.com/cosmos/cosmos-sdk/codec"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/credentials"
 	"log"
 	"testing"
 )
 
+// Test_getLatestBlockHeight now got 403 forbidden
 func Test_getLatestBlockHeight(t *testing.T) {
 
-	//rpcUrl := "grpc.osmosis.zone:9090" // osmosis 获取成功
-	rpcUrl := "grpc.cosmos.interbloc.org:443" // cosmos-hub
-	//rpcUrl := "fx-grpc.functionx.io:9090" // fxcore 获取失败
-	//rpcUrl := "192.168.20.222:26657" // fxcore本地 获取失败
+	rpcUrl := "fx-grpc.functionx.io:9090"
 
-	conn, err := grpc.Dial(rpcUrl,
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithDefaultCallOptions(grpc.ForceCodec(codec.NewProtoCodec(nil).GRPCCodec())))
+	config := &tls.Config{
+		InsecureSkipVerify: true,
+	}
+
+	conn, err := grpc.Dial(rpcUrl, grpc.WithTransportCredentials(credentials.NewTLS(config)))
 	if err != nil {
 		log.Fatalf("failed to dial: %v", err)
 	}
-
 	defer conn.Close()
 
 	tmClient := tmservice.NewServiceClient(conn)
 	request := tmservice.GetLatestBlockRequest{}
+
 	res, err := tmClient.GetLatestBlock(context.Background(), &request)
+
 	if err != nil {
 		log.Fatalf("Failed to get the latest block: %v", err)
 	}
