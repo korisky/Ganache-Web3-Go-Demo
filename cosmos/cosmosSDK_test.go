@@ -5,11 +5,10 @@ import (
 	"fmt"
 	"github.com/cosmos/cosmos-sdk/client/grpc/tmservice"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 	"io"
 	"log"
 	"net/http"
-	"time"
-
 	"testing"
 )
 
@@ -36,9 +35,10 @@ func Test_getStatusRpc(t *testing.T) {
 func Test_getStatusGRpc(t *testing.T) {
 
 	//rpcUrl := "https://rpc.osmosis.zone:443"
-	rpcUrl := "grpc.osmosis.zone:9090"
+	//rpcUrl := "grpc.osmosis.zone:9090"
+	rpcUrl := "fx-grpc.functionx.io:9090"
 
-	conn, err := grpc.Dial(rpcUrl, grpc.WithInsecure(), grpc.WithTimeout(1*time.Second))
+	conn, err := grpc.Dial(rpcUrl, grpc.WithTransportCredentials(credentials.NewClientTLSFromCert(nil, "")))
 	if err != nil {
 		log.Fatalf("failed to dial: %v", err)
 	}
