@@ -36,7 +36,7 @@ func Test_getStatusRpc(t *testing.T) {
 func Test_getStatusGRpc(t *testing.T) {
 
 	//rpcUrl := "grpc.osmosis.zone:9090"
-	rpcUrl := "fx-grpc.functionx.io:9090"
+	rpcUrl := "grpc.bd.evmos.org:9090"
 
 	conn, err := grpc.Dial(rpcUrl,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
