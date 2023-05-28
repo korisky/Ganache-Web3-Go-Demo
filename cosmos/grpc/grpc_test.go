@@ -8,16 +8,12 @@ import (
 	"testing"
 )
 
-// Test_getLatestBlockHeight
-func Test_getLatestBlockHeight(t *testing.T) {
+// Test_getLatestBlock
+func Test_getLatestBlock(t *testing.T) {
 	defer cosmos.Conn.Close()
 
 	tmClient := tmservice.NewServiceClient(cosmos.Conn)
 	request := tmservice.GetLatestBlockRequest{}
 	res, _ := tmClient.GetLatestBlock(context.Background(), &request)
 	log.Println("Latest block height:", res.Block.Header.Height)
-}
-
-func Test_getLatestBlock(t *testing.T) {
-
 }
