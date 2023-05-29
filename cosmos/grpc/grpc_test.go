@@ -45,13 +45,14 @@ func Test_decodeBlock(t *testing.T) {
 	pc := codec.NewProtoCodec(registry)
 
 	tmClient := tmservice.NewServiceClient(cosmos.Conn)
-	request := tmservice.GetBlockByHeightRequest{Height: int64(10357303)}
+	request := tmservice.GetBlockByHeightRequest{Height: int64(8592209)}
 	res, err := tmClient.GetBlockByHeight(context.Background(), &request)
 	if err != nil {
 		log.Fatalf("Failed to get block by height: %v", err)
 	}
 
 	for _, txBytes := range res.Block.Data.Txs {
+
 		var txObj tx.Tx
 		err := cosmos_proto.Unmarshal(txBytes, &txObj)
 		if err != nil {
