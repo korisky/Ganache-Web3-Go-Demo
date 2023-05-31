@@ -2,13 +2,12 @@ package grpc
 
 import (
 	"context"
+	"crypto/sha256"
+	"fmt"
 	"github.com/cosmos/cosmos-sdk/client/grpc/tmservice"
-	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/codec/types"
-	"github.com/cosmos/cosmos-sdk/std"
 	"github.com/cosmos/cosmos-sdk/types/tx"
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	cosmos_proto "github.com/cosmos/gogoproto/proto"
+	"github.com/davecgh/go-spew/spew"
 	"log"
 	"own.cosmos.demo"
 	"testing"
@@ -39,10 +38,10 @@ func Test_getLatestBlock(t *testing.T) {
 func Test_decodeBlock(t *testing.T) {
 	defer cosmos.Conn.Close()
 
-	registry := types.NewInterfaceRegistry()
-	std.RegisterInterfaces(registry)
-	banktypes.RegisterInterfaces(registry)
-	pc := codec.NewProtoCodec(registry)
+	//registry := types.NewInterfaceRegistry()
+	//std.RegisterInterfaces(registry)
+	//banktypes.RegisterInterfaces(registry)
+	//pc := codec.NewProtoCodec(registry)
 
 	tmClient := tmservice.NewServiceClient(cosmos.Conn)
 	request := tmservice.GetBlockByHeightRequest{Height: int64(10357303)}
@@ -51,6 +50,9 @@ func Test_decodeBlock(t *testing.T) {
 		log.Fatalf("Failed to get block by height: %v", err)
 	}
 
+	blockHash := sha256.Sum256(res.BlockId.Hash)
+	fmt.Printf("Block hash: %x\n", blockHash)
+
 	for _, txBytes := range res.Block.Data.Txs {
 		var txObj tx.Tx
 		err := cosmos_proto.Unmarshal(txBytes, &txObj)
@@ -58,12 +60,9 @@ func Test_decodeBlock(t *testing.T) {
 			log.Fatalf("Failed to unmarshal transaction: %v", err)
 		}
 
-		for _, anyMsg := range txObj.GetBody().GetMessages() {
-			msgSend := &banktypes.MsgSend{}
-			err := pc.UnpackAny(anyMsg, msgSend)
-			if err == nil {
-				log.Printf("MessageSend: from %s, to %s, sent amount: %s", msgSend.FromAddress, msgSend.ToAddress, msgSend.Amount.String())
-			}
-		}
+		// construct txHash
+		hash := sha256.Sum256(txBytes)
+		fmt.Printf("Transaction hash: %x\n", hash)
+		spew.Dump(txObj)
 	}
 }
