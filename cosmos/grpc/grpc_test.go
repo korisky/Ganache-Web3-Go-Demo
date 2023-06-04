@@ -7,7 +7,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/grpc/tmservice"
 	"github.com/cosmos/cosmos-sdk/types/tx"
 	cosmos_proto "github.com/cosmos/gogoproto/proto"
-	"github.com/davecgh/go-spew/spew"
 	"log"
 	"own.cosmos.demo"
 	"testing"
@@ -53,8 +52,8 @@ func Test_decodeBlock(t *testing.T) {
 	blockHash := sha256.Sum256(res.BlockId.Hash)
 	fmt.Printf("Block hash: %x\n", blockHash)
 
+	// traverse & decode transaction
 	for _, txBytes := range res.Block.Data.Txs {
-
 		var txObj tx.Tx
 		err := cosmos_proto.Unmarshal(txBytes, &txObj)
 		if err != nil {
@@ -64,6 +63,6 @@ func Test_decodeBlock(t *testing.T) {
 		// construct txHash
 		hash := sha256.Sum256(txBytes)
 		fmt.Printf("Transaction hash: %x\n", hash)
-		spew.Dump(txObj)
+
 	}
 }
