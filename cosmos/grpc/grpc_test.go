@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"github.com/cosmos/cosmos-sdk/client/grpc/tmservice"
 	"github.com/cosmos/cosmos-sdk/types/tx"
-	"github.com/cosmos/cosmos-sdk/x/bank/types"
+	bank "github.com/cosmos/cosmos-sdk/x/bank/types"
+	gov_v1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
+	staking "github.com/cosmos/cosmos-sdk/x/staking/types"
 	cosmos_proto "github.com/cosmos/gogoproto/proto"
 	"log"
 	"own.cosmos.demo"
@@ -67,14 +69,43 @@ func Test_decodeBlock(t *testing.T) {
 
 		// decode messages
 		for _, msg := range txObj.Body.Messages {
-			var bankMsg types.MsgSend
-			if err := cosmos_proto.Unmarshal(msg.Value, &bankMsg); err == nil {
+
+			switch msg.TypeUrl {
+
+			// for transfer msg
+			case "/cosmos.bank.v1beta1.MsgSend":
+				var bankMsg bank.MsgSend
+				if err := cosmos_proto.Unmarshal(msg.Value, &bankMsg); err != nil {
+					log.Fatalf("Failed to unmarshal bankMsg")
+				}
 				fmt.Printf("From: %s\n", bankMsg.FromAddress)
 				fmt.Printf("To: %s\n", bankMsg.ToAddress)
 				for _, coin := range bankMsg.Amount {
 					fmt.Printf("Denom: %s, Amount: %s\n", coin.Denom, coin.Amount)
 				}
+
+			// for governance
+			case "/cosmos.gov.v1.msgDeposit":
+				var govMsg gov_v1.MsgDeposit
+				if err := cosmos_proto.Unmarshal(msg.Value, &govMsg); err != nil {
+					log.Fatalf("Failed to unmarshal msgDeposit")
+				}
+				fmt.Printf("Governance proposalId:%d, address:%s, deposit:%s\n",
+					govMsg.ProposalId, govMsg.Depositor, govMsg.Amount)
+
+			// for delegation
+			case "/cosmos.staking.v1beta1.MsgDelegate":
+				var stakingMsg staking.MsgDelegate
+				if err := cosmos_proto.Unmarshal(msg.Value, &stakingMsg); err != nil {
+					log.Fatalf("Failed to unmarshal msgDelegate")
+				}
+				fmt.Printf("Staking from:%s, to validator:%s, with amount:%s\n",
+					stakingMsg.DelegatorAddress, stakingMsg.ValidatorAddress, stakingMsg.Amount)
+
+			default:
+				fmt.Printf("Skip for uncared msg type: %s\n", msg.TypeUrl)
 			}
+
 		}
 
 	}
