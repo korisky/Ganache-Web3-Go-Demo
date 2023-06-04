@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/cosmos/cosmos-sdk/client/grpc/tmservice"
 	"github.com/cosmos/cosmos-sdk/types/tx"
+	"github.com/cosmos/cosmos-sdk/x/bank/types"
 	cosmos_proto "github.com/cosmos/gogoproto/proto"
 	"log"
 	"own.cosmos.demo"
@@ -63,6 +64,18 @@ func Test_decodeBlock(t *testing.T) {
 		// construct txHash
 		hash := sha256.Sum256(txBytes)
 		fmt.Printf("Transaction hash: %x\n", hash)
+
+		// decode messages
+		for _, msg := range txObj.Body.Messages {
+			var bankMsg types.MsgSend
+			if err := cosmos_proto.Unmarshal(msg.Value, &bankMsg); err == nil {
+				fmt.Printf("From: %s\n", bankMsg.FromAddress)
+				fmt.Printf("To: %s\n", bankMsg.ToAddress)
+				for _, coin := range bankMsg.Amount {
+					fmt.Printf("Denom: %s, Amount: %s\n", coin.Denom, coin.Amount)
+				}
+			}
+		}
 
 	}
 }
