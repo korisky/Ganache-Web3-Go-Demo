@@ -10,6 +10,7 @@ import (
 	gov_v1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
 	staking "github.com/cosmos/cosmos-sdk/x/staking/types"
 	cosmos_proto "github.com/cosmos/gogoproto/proto"
+	"github.com/golang/protobuf/proto"
 	"log"
 	"own.cosmos.demo"
 	"testing"
@@ -34,6 +35,20 @@ func Test_getLatestBlock(t *testing.T) {
 	request := tmservice.GetLatestBlockRequest{}
 	res, _ := tmClient.GetLatestBlock(context.Background(), &request)
 	log.Println("Latest block height:", res.Block.Header.Height)
+}
+
+// Test_getDenomMeta is for retrieving denom's meta data
+func Test_getDenomMeta(t *testing.T) {
+	defer cosmos.Conn.Close()
+
+	queryClient := bank.NewQueryClient(cosmos.Conn)
+	request := bank.QueryDenomMetadataRequest{Denom: "usdt"}
+	metadata, err := queryClient.DenomMetadata(context.Background(), &request)
+	if err != nil {
+		log.Fatalf("Retrieve error %v", err)
+	}
+
+	fmt.Println(proto.MarshalTextString(metadata))
 }
 
 // Test_decodeBlock
