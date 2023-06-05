@@ -7,6 +7,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/grpc/tmservice"
 	"github.com/cosmos/cosmos-sdk/types/tx"
 	bank "github.com/cosmos/cosmos-sdk/x/bank/types"
+	distribution "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	gov_v1 "github.com/cosmos/cosmos-sdk/x/gov/types/v1"
 	staking "github.com/cosmos/cosmos-sdk/x/staking/types"
 	cosmos_proto "github.com/cosmos/gogoproto/proto"
@@ -56,7 +57,8 @@ func Test_decodeBlock(t *testing.T) {
 	defer cosmos.Conn.Close()
 
 	//height := 8592209 // msg transfer
-	height := 8708499 // native delegate
+	//height := 8708499 // delegate deposit
+	height := 8389774 // delegate reward
 
 	tmClient := tmservice.NewServiceClient(cosmos.Conn)
 	request := tmservice.GetBlockByHeightRequest{Height: int64(height)}
@@ -78,7 +80,7 @@ func Test_decodeBlock(t *testing.T) {
 
 		// construct txHash
 		hash := sha256.Sum256(txBytes)
-		fmt.Printf("Transaction hash: %x\n", hash)
+		fmt.Printf("Transaction hash: %x\n\n", hash)
 
 		// decode messages
 		for _, msg := range txObj.Body.Messages {
@@ -106,7 +108,7 @@ func Test_decodeBlock(t *testing.T) {
 				fmt.Printf("Governance proposalId:%d, address:%s, deposit:%s\n",
 					govMsg.ProposalId, govMsg.Depositor, govMsg.Amount)
 
-			// for delegation
+			// for delegation deposit
 			case "/cosmos.staking.v1beta1.MsgDelegate":
 				var stakingMsg staking.MsgDelegate
 				if err := cosmos_proto.Unmarshal(msg.Value, &stakingMsg); err != nil {
@@ -114,6 +116,14 @@ func Test_decodeBlock(t *testing.T) {
 				}
 				fmt.Printf("Staking from:%s,\n to validator:%s,\n with amount:%s\n",
 					stakingMsg.DelegatorAddress, stakingMsg.ValidatorAddress, stakingMsg.Amount)
+
+			case "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward":
+				var distributionMsg distribution.MsgWithdrawDelegatorReward
+				if err := cosmos_proto.Unmarshal(msg.Value, &distributionMsg); err != nil {
+					log.Fatalf("Failed to unmarshar MsgWithdrawDelegatorReward")
+				}
+				fmt.Printf("Distribution delegator:%s, validaton:%s\n",
+					distributionMsg.DelegatorAddress, distributionMsg.ValidatorAddress)
 
 			default:
 				fmt.Printf("Skip for uncared msg type: %s\n", msg.TypeUrl)
