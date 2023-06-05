@@ -55,13 +55,11 @@ func Test_getDenomMeta(t *testing.T) {
 func Test_decodeBlock(t *testing.T) {
 	defer cosmos.Conn.Close()
 
-	//registry := types.NewInterfaceRegistry()
-	//std.RegisterInterfaces(registry)
-	//banktypes.RegisterInterfaces(registry)
-	//pc := codec.NewProtoCodec(registry)
+	//height := 8592209 // msg transfer
+	height := 8708499 // native delegate
 
 	tmClient := tmservice.NewServiceClient(cosmos.Conn)
-	request := tmservice.GetBlockByHeightRequest{Height: int64(8592209)}
+	request := tmservice.GetBlockByHeightRequest{Height: int64(height)}
 	res, err := tmClient.GetBlockByHeight(context.Background(), &request)
 	if err != nil {
 		log.Fatalf("Failed to get block by height: %v", err)
@@ -114,7 +112,7 @@ func Test_decodeBlock(t *testing.T) {
 				if err := cosmos_proto.Unmarshal(msg.Value, &stakingMsg); err != nil {
 					log.Fatalf("Failed to unmarshal msgDelegate")
 				}
-				fmt.Printf("Staking from:%s, to validator:%s, with amount:%s\n",
+				fmt.Printf("Staking from:%s,\n to validator:%s,\n with amount:%s\n",
 					stakingMsg.DelegatorAddress, stakingMsg.ValidatorAddress, stakingMsg.Amount)
 
 			default:
