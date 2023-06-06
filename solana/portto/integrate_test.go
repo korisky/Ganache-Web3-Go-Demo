@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/davecgh/go-spew/spew"
+	"github.com/portto/solana-go-sdk/program/token"
+	"log"
 	"testing"
 	"web3Demo/portto/accounts"
 	"web3Demo/portto/nft"
@@ -27,6 +29,16 @@ func Test_AccountInfo(t *testing.T) {
 	fmt.Println()
 	nft_info, _ := cli.GetAccountInfo(context.Background(), nftMintAddress)
 	spew.Dump(nft_info)
+}
+
+// Test_AccountInfoDecode -> here is the correct way to decode token account's account info
+func Test_AccountInfoDecode(t *testing.T) {
+	tokenInfo, _ := cli.GetAccountInfo(context.Background(), "4jfNnrE97f4CzUt6z9C36NqpFxpv5T9erKU9JsG6Kr5N")
+	tokenAccount, err := token.TokenAccountFromData(tokenInfo.Data)
+	if err != nil {
+		log.Fatalf("Error on decoding token account info, %v", err)
+	}
+	spew.Dump(tokenAccount)
 }
 
 // Test_MetaplexNft decode nft-meta data -> input correct mint account for that specific nft/token
