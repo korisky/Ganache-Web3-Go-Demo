@@ -31,18 +31,27 @@ func Test_AccountInfo(t *testing.T) {
 	spew.Dump(nft_info)
 }
 
-// Test_AccountInfoDecode -> here is the correct way to decode token account's account info
-func Test_AccountInfoDecode(t *testing.T) {
-	tokenInfo, _ := cli.GetAccountInfo(context.Background(), "4jfNnrE97f4CzUt6z9C36NqpFxpv5T9erKU9JsG6Kr5N")
-	tokenAccount, err := token.TokenAccountFromData(tokenInfo.Data)
+// Test_TokenAccountInfo -> here is the correct way to decode token account's account info
+func Test_TokenAccountInfo(t *testing.T) {
+	accountInfo, _ := cli.GetAccountInfo(context.Background(), "4jfNnrE97f4CzUt6z9C36NqpFxpv5T9erKU9JsG6Kr5N")
+	tokenAccount, err := token.TokenAccountFromData(accountInfo.Data)
 	if err != nil {
 		log.Fatalf("Error on decoding token account info, %v", err)
 	}
 	spew.Dump(tokenAccount)
 }
 
+// Test_MintAccountInfo -> get the mint account's info (decimal, etc.)
+func Test_MintAccountInfo(t *testing.T) {
+	accountInfo, _ := cli.GetAccountInfo(context.Background(), "4jfNnrE97f4CzUt6z9C36NqpFxpv5T9erKU9JsG6Kr5N")
+	tokenAccount, _ := token.TokenAccountFromData(accountInfo.Data)
+	mintAccountInfo, _ := cli.GetAccountInfo(context.Background(), tokenAccount.Mint.ToBase58())
+	mintAccount, _ := token.MintAccountFromData(mintAccountInfo.Data)
+	spew.Dump(mintAccount)
+}
+
 // Test_MetaplexNft decode nft-meta data -> input correct mint account for that specific nft/token
 func Test_MetaplexNft(t *testing.T) {
 	nft.TryDecodeMetadata(cli, "EZqtsCxYpYtNaX1Pd2ep3ZUVxS6qHLVQriugvbKGEahk") // is nft
-	nft.TryDecodeMetadata(cli, "Gd8nxWzbnJ2zwtn5TukvEMKKjjbFhdtqA1L67DgnRvXc") // is not nft
+	nft.TryDecodeMetadata(cli, "Gd8nxWzbnJ2zwtn5TukvEMKKjjbFhdtqA1L67DgnRvXc") // is not nft (would result in totally null)
 }
