@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/portto/solana-go-sdk/program/token"
-	"log"
 	"testing"
 	"web3Demo/portto/accounts"
 	"web3Demo/portto/nft"
@@ -36,7 +35,7 @@ func Test_TokenAccountInfo(t *testing.T) {
 	accountInfo, _ := cli.GetAccountInfo(context.Background(), "4jfNnrE97f4CzUt6z9C36NqpFxpv5T9erKU9JsG6Kr5N")
 	tokenAccount, err := token.TokenAccountFromData(accountInfo.Data)
 	if err != nil {
-		log.Fatalf("Error on decoding token account info, %v", err)
+		t.Errorf("Error on decoding token account info, %v", err)
 	}
 	spew.Dump(tokenAccount)
 }

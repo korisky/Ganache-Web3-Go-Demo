@@ -103,7 +103,7 @@ func Test_decodeBlock(t *testing.T) {
 			case "/cosmos.gov.v1.msgDeposit":
 				var govMsg gov_v1.MsgDeposit
 				if err := cosmos_proto.Unmarshal(msg.Value, &govMsg); err != nil {
-					log.Fatalf("Failed to unmarshal msgDeposit")
+					t.Errorf("Failed to unmarshal msgDeposit")
 				}
 				fmt.Printf("Governance proposalId:%d, address:%s, deposit:%s\n",
 					govMsg.ProposalId, govMsg.Depositor, govMsg.Amount)
@@ -112,7 +112,7 @@ func Test_decodeBlock(t *testing.T) {
 			case "/cosmos.staking.v1beta1.MsgDelegate":
 				var stakingMsg staking.MsgDelegate
 				if err := cosmos_proto.Unmarshal(msg.Value, &stakingMsg); err != nil {
-					log.Fatalf("Failed to unmarshal msgDelegate")
+					t.Errorf("Failed to unmarshal msgDelegate")
 				}
 				fmt.Printf("Staking from:%s,\n to validator:%s,\n with amount:%s\n",
 					stakingMsg.DelegatorAddress, stakingMsg.ValidatorAddress, stakingMsg.Amount)
@@ -120,7 +120,7 @@ func Test_decodeBlock(t *testing.T) {
 			case "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward":
 				var distributionMsg distribution.MsgWithdrawDelegatorReward
 				if err := cosmos_proto.Unmarshal(msg.Value, &distributionMsg); err != nil {
-					log.Fatalf("Failed to unmarshar MsgWithdrawDelegatorReward")
+					t.Errorf("Failed to unmarshar MsgWithdrawDelegatorReward")
 				}
 				fmt.Printf("Distribution delegator:%s, validaton:%s\n",
 					distributionMsg.DelegatorAddress, distributionMsg.ValidatorAddress)
