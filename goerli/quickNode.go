@@ -8,7 +8,8 @@ import (
 
 var (
 	ctx = context.Background()
-	url = "https://goerli.infura.io/v3/3f0482cf4c3545dbabaeab75f414e467"
+	//url = "https://goerli.infura.io/v3/3f0482cf4c3545dbabaeab75f414e467"
+	url = "https://mainnet.infura.io/v3/3f0482cf4c3545dbabaeab75f414e467"
 	// connect to own web3 node url
 	client, _ = ethclient.DialContext(ctx, url)
 )
