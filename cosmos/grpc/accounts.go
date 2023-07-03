@@ -6,9 +6,14 @@ import (
 	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 )
 
-// Create_Cdc is for getting simple crypto code compiler
-func Create_Cdc() *codec.ProtoCodec {
+// CreateCdc is for getting simple crypto code compiler
+func CreateCdc() *codec.ProtoCodec {
 	registry := codectypes.NewInterfaceRegistry()
 	cryptocodec.RegisterInterfaces(registry)
 	return codec.NewProtoCodec(registry)
+}
+
+// SendTransaction is for simple transfer
+func SendTransaction() {
+
 }

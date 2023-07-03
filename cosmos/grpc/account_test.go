@@ -6,19 +6,18 @@ import (
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/go-bip39"
 	"github.com/golang/protobuf/proto"
 	"log"
 
 	"testing"
 )
 
-var mnemonic = ""
-
 // Test_RecoverAccountByMnemonic recover account from mnemonic -> keyring -> account could divide public address
 func Test_RecoverAccountByMnemonic(*testing.T) {
 
 	// recover account by using mnemonic
-	kb := keyring.NewInMemory(Create_Cdc())
+	kb := keyring.NewInMemory(CreateCdc())
 	record, _ := kb.NewAccount("osmo", mnemonic, keyring.DefaultBIP39Passphrase, sdk.FullFundraiserPath, hd.Secp256k1)
 
 	// Set the config for the Cosmos SDK.
@@ -44,4 +43,25 @@ func Test_RecoverAccountByMnemonic(*testing.T) {
 	}
 
 	fmt.Printf("Cosmos address (Bech32): %s\n", addressString)
+}
+
+var mnemonic = ""
+
+// Test_KeyRecover try recover private key from mnemonic
+func Test_KeyRecover(t *testing.T) {
+
+	seed, err := bip39.NewSeedWithErrorChecking(mnemonic, "")
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	masterKey, chainCode := hd.ComputeMastersFromSeed(seed)
+
+	config := sdk.GetConfig()
+	config.SetBech32PrefixForAccount("osmo", "osmo")
+
+	priKey, err := hd.DerivePrivateKeyForPath(masterKey, chainCode, sdk.GetConfig().GetFullBIP44Path())
+
+	privKeySecp256k1 := secp256k1.PrivKey{Key: priKey}
+	fmt.Println(privKeySecp256k1)
 }
