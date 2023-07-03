@@ -2,9 +2,6 @@ package grpc
 
 import (
 	"fmt"
-	"github.com/cosmos/cosmos-sdk/codec"
-	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
-	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	"github.com/cosmos/cosmos-sdk/crypto/hd"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
@@ -20,13 +17,8 @@ var mnemonic = ""
 // Test_RecoverAccountByMnemonic recover account from mnemonic -> keyring -> account could divide public address
 func Test_RecoverAccountByMnemonic(*testing.T) {
 
-	// create codec
-	registry := codectypes.NewInterfaceRegistry()
-	cryptocodec.RegisterInterfaces(registry)
-	cdc := codec.NewProtoCodec(registry)
-
 	// recover account by using mnemonic
-	kb := keyring.NewInMemory(cdc)
+	kb := keyring.NewInMemory(Create_Cdc())
 	record, _ := kb.NewAccount("osmo", mnemonic, keyring.DefaultBIP39Passphrase, sdk.FullFundraiserPath, hd.Secp256k1)
 
 	// Set the config for the Cosmos SDK.
