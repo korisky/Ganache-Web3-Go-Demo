@@ -2,6 +2,7 @@ package grpc
 
 import (
 	"fmt"
+	"github.com/cosmos/cosmos-sdk/client/grpc/tmservice"
 	"github.com/cosmos/cosmos-sdk/crypto/hd"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
@@ -9,10 +10,13 @@ import (
 	"github.com/cosmos/go-bip39"
 	"github.com/golang/protobuf/proto"
 	"log"
+	cosmos "own.cosmos.demo"
 	"own.cosmos.demo/grpc/account"
 
 	"testing"
 )
+
+var mnemonic = ""
 
 // Test_RecoverAccountByMnemonic recover account from mnemonic -> keyring -> account could divide public address
 func Test_RecoverAccountByMnemonic(*testing.T) {
@@ -46,12 +50,12 @@ func Test_RecoverAccountByMnemonic(*testing.T) {
 	fmt.Printf("Cosmos address (Bech32): %s\n", addressString)
 }
 
-var mnemonic = ""
-
 // Test_KeyRecover try recover private key from mnemonic
 func Test_KeyRecover(t *testing.T) {
 
-	seed, err := bip39.NewSeedWithErrorChecking(mnemonic, "")
+	theMnemonic := ""
+
+	seed, err := bip39.NewSeedWithErrorChecking(theMnemonic, "")
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -65,4 +69,7 @@ func Test_KeyRecover(t *testing.T) {
 
 	privKeySecp256k1 := secp256k1.PrivKey{Key: priKey}
 	fmt.Println(privKeySecp256k1)
+
+	client := tmservice.NewServiceClient(cosmos.Conn)
+	client.
 }
