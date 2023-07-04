@@ -1,4 +1,4 @@
-package grpc
+package account
 
 import (
 	"github.com/cosmos/cosmos-sdk/codec"

@@ -9,6 +9,7 @@ import (
 	"github.com/cosmos/go-bip39"
 	"github.com/golang/protobuf/proto"
 	"log"
+	"own.cosmos.demo/grpc/account"
 
 	"testing"
 )
@@ -17,7 +18,7 @@ import (
 func Test_RecoverAccountByMnemonic(*testing.T) {
 
 	// recover account by using mnemonic
-	kb := keyring.NewInMemory(CreateCdc())
+	kb := keyring.NewInMemory(account.CreateCdc())
 	record, _ := kb.NewAccount("osmo", mnemonic, keyring.DefaultBIP39Passphrase, sdk.FullFundraiserPath, hd.Secp256k1)
 
 	// Set the config for the Cosmos SDK.
