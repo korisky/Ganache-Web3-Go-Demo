@@ -9,6 +9,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/golang/protobuf/proto"
+
 	cosmos "own.cosmos.demo"
 
 	"log"
@@ -91,11 +92,14 @@ func Test_AddressBalance(t *testing.T) {
 	fmt.Println(balances)
 }
 
-//// prepareTx is for preparing a need txn before sign it
-//func prepareTx() {
-//
-//	fromAddress, _ := sdk.AccAddressFromBech32("")
-//	toAddress, _ := sdk.AccAddressFromBech32("")
-//
-//	send := banktypes.NewMsgSend(fromAddress, toAddress, types.NewCoins(types.NewInt64Coin("FX", 300)))
-//}
+// prepareTx is for preparing a need txn before sign it
+func Test_SendTxn(t *testing.T) {
+
+	// build transaction config
+
+	//fromAddress, _ := sdk.AccAddressFromBech32("")
+	//toAddress, _ := sdk.AccAddressFromBech32("")
+	//
+	//sendMsg := banktypes.NewMsgSend(fromAddress, toAddress, types.NewCoins(types.NewInt64Coin("FX", 300)))
+
+}
