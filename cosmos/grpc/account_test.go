@@ -7,6 +7,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/golang/protobuf/proto"
 
@@ -82,9 +83,7 @@ func Test_KeyRecover(t *testing.T) {
 
 // Test_AddressBalance is for query all balances
 func Test_AddressBalance(t *testing.T) {
-
 	defer cosmos.Conn.Close()
-
 	queryClient := banktypes.NewQueryClient(cosmos.Conn)
 	request := banktypes.QueryAllBalancesRequest{Address: "fx1xmc2qsxgucyhf50nfvckk054dagfmdl9ddkjlp"}
 
@@ -92,14 +91,33 @@ func Test_AddressBalance(t *testing.T) {
 	fmt.Println(balances)
 }
 
-// prepareTx is for preparing a need txn before sign it
-func Test_SendTxn(t *testing.T) {
+func Test_AccountSequence(t *testing.T) {
+	defer cosmos.Conn.Close()
+	client := authtypes.NewQueryClient(cosmos.Conn)
+	request := authtypes.QueryAccountRequest{Address: "fx1xmc2qsxgucyhf50nfvckk054dagfmdl9ddkjlp"}
 
-	// build transaction config
-
-	//fromAddress, _ := sdk.AccAddressFromBech32("")
-	//toAddress, _ := sdk.AccAddressFromBech32("")
-	//
-	//sendMsg := banktypes.NewMsgSend(fromAddress, toAddress, types.NewCoins(types.NewInt64Coin("FX", 300)))
-
+	response, _ := client.Account(context.Background(), &request)
+	fmt.Println(response)
 }
+
+// prepareTx is for preparing a need txn before sign it
+//func Test_SendTxn(t *testing.T) {
+//
+//
+//	fromAddress, _ := sdk.AccAddressFromBech32("")
+//	toAddress, _ := sdk.AccAddressFromBech32("")
+//
+//	sendMsg := banktypes.NewMsgSend(
+//		fromAddress,
+//		toAddress,
+//		sdk.NewCoins(sdk.NewInt64Coin("FX", 3000000)))
+//
+//	// Create a transaction builder
+//	txf := tx.Factory{}.
+//		WithChainID(chainID).
+//		WithGas(200000).
+//		WithFees("1000FX"). // Set the fee here
+//		WithMemo("").
+//		WithAccountNumber(0).
+//		WithSequence(0)
+//}
