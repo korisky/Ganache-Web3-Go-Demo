@@ -16,8 +16,8 @@ var (
 	RpcUrl = "https://rpc.osmotest5.osmosis.zone"
 	// GRpcUrl ->
 	//GRpcUrl = "fx-grpc.functionx.io:9090"
-	//GRpcUrl = "testnet-fx-grpc.functionx.io:9090"
-	GRpcUrl = "grpc.osmotest5.osmosis.zone:443"
+	GRpcUrl = "testnet-fx-grpc.functionx.io:9090"
+	//GRpcUrl = "grpc.osmotest5.osmosis.zone:443"
 	pool, _ = x509.SystemCertPool()
 	config  = &tls.Config{
 		RootCAs: pool,
