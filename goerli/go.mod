@@ -3,6 +3,7 @@ module own.goerli.demo
 go 1.20
 
 require (
+	github.com/davecgh/go-spew v1.1.1
 	github.com/ethereum/go-ethereum v1.11.6
 	github.com/wealdtech/go-ens v1.0.0
 )
