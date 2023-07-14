@@ -26,11 +26,9 @@ func Test_EthGetLog(t *testing.T) {
 		Topics:    [][]common.Hash{{common.BytesToHash(crypto.Keccak256(logTransferSingleSig))}},
 	}
 
-	// calling
 	logs, err := client.FilterLogs(context.Background(), filterQuery)
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	spew.Dump(logs)
 }
