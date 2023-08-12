@@ -8,6 +8,7 @@ import (
 	"github.com/golang/protobuf/proto"
 	"github.com/tendermint/tendermint/rpc/client/http"
 	cosmos "own.cosmos.demo"
+	"runtime"
 	"testing"
 )
 
@@ -20,9 +21,14 @@ func Test_getLatestBlockHeight_Rpc(t *testing.T) {
 }
 
 func Test_decodeBlock_Rpc(t *testing.T) {
+
+	var m runtime.MemStats
+	runtime.ReadMemStats(&m)
+	fmt.Println("Init heap allocation: ", m.HeapAlloc)
+
 	// request
 	c, _ := http.New(cosmos.RpcUrl)
-	blockHeight := int64(848636)
+	blockHeight := int64(2124985)
 	// decoding
 	block, _ := c.Block(context.Background(), &blockHeight)
 	// unmarshal all proto tx
@@ -34,5 +40,9 @@ func Test_decodeBlock_Rpc(t *testing.T) {
 		}
 		spew.Dump(tx)
 	}
+
+	runtime.GC()
+	runtime.ReadMemStats(&m)
+	fmt.Println("After heap allocation: ", m.HeapAlloc)
 
 }

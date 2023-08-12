@@ -14,6 +14,7 @@ import (
 var (
 	// RpcUrl ->
 	RpcUrl = "https://rpc.osmotest5.osmosis.zone"
+	//RpcUrl = "https://testnet-fx-json.functionx.io:26657"
 	// GRpcUrl ->
 	//GRpcUrl = "fx-grpc.functionx.io:9090"
 	GRpcUrl = "testnet-fx-grpc.functionx.io:9090"
