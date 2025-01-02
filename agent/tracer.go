@@ -23,7 +23,7 @@ func initTracer() (func(context.Context), error) {
 	)
 	otel.SetTracerProvider(tracerProvider)
 
-	// return the function -> for shutting down
+	// return the function -> for shutting down (clean up)
 	return func(ctx context.Context) {
 		_ = tracerProvider.Shutdown(ctx)
 	}, nil
