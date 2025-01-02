@@ -15,7 +15,18 @@ var client = &http.Client{
 }
 
 func main() {
+	monitorUrl := "https://"
 
+	weChatWebhook := "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key="
+
+	interval := 15 * time.Minute
+
+	for {
+		if !checkHttpRespCode200(weChatWebhook) {
+			sendAlert(weChatWebhook, monitorUrl)
+		}
+		time.Sleep(interval)
+	}
 }
 
 // checkHttpRespCode200 only check http response code is 200 or not
