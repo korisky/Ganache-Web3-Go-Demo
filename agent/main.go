@@ -5,6 +5,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.opentelemetry.io/otel"
 	"log"
+	"net/http"
+	"time"
 )
 
 func main() {
@@ -31,4 +33,16 @@ func main() {
 		c.Next() // -> similar to Netty's handler chain
 	})
 
+	// simple endpoint
+	router.GET("/hello", func(c *gin.Context) {
+		tracer := otel.Tracer("hello-tracer")
+		_, span := tracer.Start(c.Request.Context(), "hello-handler")
+		defer span.End()
+
+		time.Sleep(50 * time.Millisecond)
+		c.JSON(http.StatusOK, gin.H{"msg": "hello, golang agent"})
+	})
+
+	// server start
+	router.Run(":8080")
 }
