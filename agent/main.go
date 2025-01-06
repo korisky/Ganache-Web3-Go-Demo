@@ -4,6 +4,8 @@ import (
 	"context"
 	"github.com/gin-gonic/gin"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
+	"go.opentelemetry.io/otel/trace"
 	"log"
 	"net/http"
 	"time"
@@ -36,7 +38,13 @@ func main() {
 	// simple endpoint
 	router.GET("/hello", func(c *gin.Context) {
 		tracer := otel.Tracer("hello-tracer")
-		_, span := tracer.Start(c.Request.Context(), "hello-handler")
+		_, span := tracer.Start(c.Request.Context(), "hello-handler",
+			// attributes for endpoints -> tags in Jaeger
+			trace.WithAttributes(
+				attribute.String("http.method", c.Request.Method),
+				attribute.String("http.url", c.Request.RequestURI),
+				attribute.String("http.host", c.Request.Host),
+			))
 		defer span.End()
 
 		time.Sleep(50 * time.Millisecond)
