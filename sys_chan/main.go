@@ -3,23 +3,87 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
 	"sync/atomic"
 	"syscall"
+	"time"
+)
+
+const (
+	_shutdownPeriod      = 15 * time.Second
+	_shutdownHardPeriod  = 3 * time.Second
+	_readinessDrainDelay = 5 * time.Second
 )
 
 var isShuttingDown atomic.Bool
 
+// main a graceful full http app example
 func main() {
+	// 1. setup signal ctx
+	rootCtx, stop := signal.NotifyContext(context.Background(), syscall.SIGTERM, syscall.SIGINT)
+	defer stop()
 
-	// Before go 1.16
-	//PureIntTerSigHandling()
+	// 2. readiness endpoint
+	http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
+		if isShuttingDown.Load() {
+			http.Error(w, "Server shutting down", http.StatusServiceUnavailable)
+			return
+		}
+		fmt.Fprintln(w, "OK")
+	})
 
-	// After go 1.16, ties the signal handling with Ctx
-	BindIntTerSigHandlingWithCtx()
+	// sample business logic
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		select {
+		case <-time.After(2 * time.Second):
+			fmt.Fprintln(w, "Hello Graceful Server")
+		case <-r.Context().Done():
+			http.Error(w, "Request cancelled", http.StatusRequestTimeout)
+		}
+	})
 
+	// 3. ensure in-flight requests aren't cancelled immediately
+	ongoingCtx, stopOngoingGracefully := context.WithCancel(context.Background())
+	server := &http.Server{
+		Addr: ":8099",
+		BaseContext: func(_ net.Listener) context.Context {
+			return ongoingCtx
+		},
+	}
+
+	// server start by another routine
+	go func() {
+		log.Println("Server starting on :8099")
+		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("ListenAndServer: %v", err)
+		}
+	}()
+
+	// 4. waiting for shutdown signal
+	<-rootCtx.Done()
+	stop()
+	isShuttingDown.Store(true)
+	log.Println("Received shutdown signal, shutting down gracefully")
+
+	// 5. give time for readiness check to propagate
+	time.Sleep(_readinessDrainDelay)
+	log.Println("Readiness check propagated, waiting for ongoing requests")
+
+	// 6. waiting ongoing request consumption
+	shutdownCtx, cancel := context.WithTimeout(context.Background(), _shutdownPeriod)
+	defer cancel()
+	err := server.Shutdown(shutdownCtx)
+	stopOngoingGracefully()
+
+	if err != nil {
+		log.Println("Failed to wait for ongoing requests to finish, waiting for forced cancellation")
+		time.Sleep(_shutdownHardPeriod)
+	}
+	log.Println("Server shutdown gracefully")
 }
 
 // BindIntTerSigHandlingWithCtx after go ver 1.16, OS signal handling could bind with ctx
