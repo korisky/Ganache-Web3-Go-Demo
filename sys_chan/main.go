@@ -22,6 +22,13 @@ const (
 var isShuttingDown atomic.Bool
 
 // main a graceful full http app example
+// 1. 构建notifyContext作为signal与ctx的绑定 (rootCtx), 当接收到SIGNTERM或者SIGINT的时候, 会调用该ctx的关闭
+// 2. 构建readiness-endpoint处理, 当接收到SIGNTERM等信号, 提前通过readiness让k8s进行pod切换处理
+// 3. 构建ongoingCtx, 使用该ctx作为server的ctx, 附带withCancel主动关闭方式
+// 4. 阻塞等待rootCtx.Done(), 当接收到信息时, 优先调用rootCtx的stop方法, 并设置全局变量isShuttingDown=true让readinessProbe也就是k8s知道
+// 5. 主动等待readinessProbe的处理时间, 随后准备主动关闭server
+// 6. server的关闭, 新建一个带有timeout的cancelCtx, 相当于针对还在ongoing的request, 也有最终等待时长
+// 7. 最后调用ongoingCtx的关闭func, 并defer掉cancelCtx的关闭func, 整个服务完全的处理完毕
 func main() {
 	// 1. setup signal ctx
 	rootCtx, stop := signal.NotifyContext(context.Background(), syscall.SIGTERM, syscall.SIGINT)
